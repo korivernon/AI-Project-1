@@ -60,8 +60,3 @@ def printPretty(param):
                 print(param[i][j] + " ", end="", sep=" ")
             print()
 
-def main():
-    testBoard = Board("test.txt")
-    printPretty(testBoard.pre)
-    printPretty(testBoard.post)
-main()
