@@ -35,13 +35,25 @@ def readFromFile(filename, pre, post):
     return True
 
 def parseLine(line):
+    '''
+    Given a line, parse the line and
+    convert all of the items to integers
+    if possible
+    precondition -> lst(string)
+    postcondition -> lst(int) if possible
+    return: lst(int) if possible
+    '''
     for i in range(len(line)):
         try:
             line[i] = int(line[i])
         except ValueError:
             line[i] = line[i]
     return line
+
 def printPretty(param):
+    '''
+    Print 2D array prettily
+    '''
     if param != []:
         for i in range(len(param)):
             for j in range(len(param[i])):
