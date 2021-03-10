@@ -26,6 +26,7 @@ def readFromFile(filename, pre, post):
     for line in inFile:
         count += 1
         line = line.strip().split(" ")
+        line = parseLine(line)
         if count < 5:
             pre.append(line)
         elif count > 5:
@@ -33,6 +34,13 @@ def readFromFile(filename, pre, post):
     inFile.close()
     return True
 
+def parseLine(line):
+    for i in range(len(line)):
+        try:
+            line[i] = int(line[i])
+        except ValueError:
+            line[i] = line[i]
+    return line
 def printPretty(param):
     if param != []:
         for i in range(len(param)):
