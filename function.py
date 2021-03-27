@@ -25,24 +25,48 @@ def checkAvail(loc, cond, lst ):
     :return: None
     '''
     #check up
-    if loc[0] > LOWER:
+    up = loc[0] > LOWER
+    down = loc[0] < UPPER
+    left = loc[1] > LOWER
+    right = loc[1] < UPPER
+    if up:
         lst.append(
             (loc[0]-1, loc[1])
         )
     #check down
-    if loc[0] < UPPER:
+    if down:
         lst.append(
             (loc[0]+1, loc[1])
         )
     #check left
-    if loc[1] > LOWER:
+    if left:
         lst.append(
             (loc[0], loc[1]-1)
         )
     #check right
-    if loc[1] < UPPER:
+    if right:
         lst.append(
             (loc[0], loc[1]+1)
+        )
+    # check left up
+    if up and left:
+        lst.append(
+            (loc[0] - 1, loc[1] -1 )
+        )
+    #check right up
+    if up and right:
+        lst.append(
+            (loc[0] - 1, loc[1] + 1 )
+        )
+    # check left down
+    if down and left:
+        lst.append(
+            (loc[0] + 1, loc[1] - 1)
+        )
+    #check right down
+    if down and right:
+        lst.append(
+            (loc[0] + 1, loc[1] + 1)
         )
 
 def readFromFile(filename, pre, post):
