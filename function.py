@@ -2,6 +2,7 @@ BLANK = "BLANK"
 LOWER = 0
 UPPER = 3
 
+
 def getBlankTup(cond, avail = None):
     '''
     get the precondition or post condition tuple when passed the
@@ -79,21 +80,40 @@ def readFromFile(filename, pre, post):
     postcondition -> 2D data array
     return: list
     '''
+    preBoard, postBoard = [],[]
     inFile = open(filename, "r")
     count = 0
     for line in inFile:
         count += 1
         line = line.strip().split(" ")
         line = parseLine(line) #convert from string to integer
+
+
         if not checkLine(line):
             print("\n\tRow: {}".format(count))
             print("Filename with error present: {}\n".format(filename))
         if count < 5:
             pre.append(line)
+            preBoard += line
         elif count > 5:
             post.append(line)
-    inFile.close()
-    return True
+            postBoard += line
+    # check if boards are valid
+
+    try:
+        # try popping the blank space
+
+        preBoard.pop(preBoard.index(BLANK)); postBoard.pop(postBoard.index(BLANK))
+        preBoard.sort(); postBoard.sort()
+        # print(preBoard) ; print(postBoard)
+        if not (preBoard == postBoard ):
+            inFile.close()
+            return False
+    except TypeError:
+        doNothing = ""
+    finally:
+        inFile.close()
+        return True
 
 def checkLine(line):
     retBool = True
