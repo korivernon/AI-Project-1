@@ -101,22 +101,19 @@ def parseLine(line):
             line[i] = line[i]
     return line
 
-def printPretty(param):
+def printPretty(cond):
     '''
     Print 2D array prettily
+    :param cond pre or post condition
     '''
-    retStr = ''
     try:
-        if param != []:
-            for i in range(len(param)):
+        if cond != []:
+            for i in range(len(cond)):
                 try:
-                    for j in range(len(param[i])):
-                        retStr += str(param[i][j]) + "\t"
-                        print(str(param[i][j]) + "\t", end="", sep="\t")
-                    retStr += '\n'
+                    for j in range(len(cond[i])):
+                        print(str(cond[i][j]) + "\t", end="", sep="\t")
                     print()
                 except TypeError:
                     return
     except AttributeError:
         return
-    return retStr
