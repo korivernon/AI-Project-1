@@ -5,19 +5,26 @@ class Board:
         self.pre = []
         self.post = []
         self.valid = False
+        self.availability = []
         if filename != "":
             self.filename = filename
             self.valid = readFromFile(filename, self.pre, self.post)
             if self.valid:
-                self.blank = (getBlankTup(self.pre), getBlankTup(self.post))
+                self.blank = (getBlankTup(self.pre, self.availability), getBlankTup(self.post))
         else:
             self.filename = filename
-        if self.valid == False:
-            self.blank = (
-                (-1,-1),
-                (-1,-1)
-            )
-            print("Board init Failure: You have given an invalid file input.\n")
+            if self.valid == False:
+                self.blank = (
+                    (-1,-1),
+                    (-1,-1)
+                )
+                print("Board init Failure: You have given an invalid file input.\n")
+
+    def stats(self):
+        print("Blank Location: {}".format(self.blank[0]))
+        print("Availability:")
+        for i in range (len(self.availability)):
+            print("\t{}".format(self.availability[i]))
 
 
 

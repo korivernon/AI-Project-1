@@ -1,6 +1,8 @@
 BLANK = "BLANK"
+LOWER = 0
+UPPER = 3
 
-def getBlankTup(cond):
+def getBlankTup(cond, avail = None):
     '''
     get the precondition or post condition tuple when passed the
     :param cond: precondition tuple
@@ -8,8 +10,40 @@ def getBlankTup(cond):
     '''
     for i in range(len(cond)):
         for j in range(len(cond[i])):
-            if cond[i] == BLANK:
+            if cond[i][j] == BLANK:
+                if (avail != None):
+                    #check all sides
+                    checkAvail( (i,j) , cond, avail)
                 return (i, j)
+    return (-1,-1)
+
+def checkAvail(loc, cond, lst ):
+    '''
+    :param loc: this is the location that we are checking
+    :param cond: this is the condition, either pre or post
+    :param lst: this is the return list
+    :return: None
+    '''
+    #check up
+    if loc[0] > LOWER:
+        lst.append(
+            (loc[0]-1, loc[1])
+        )
+    #check down
+    if loc[0] < UPPER:
+        lst.append(
+            (loc[0]+1, loc[1])
+        )
+    #check left
+    if loc[1] > LOWER:
+        lst.append(
+            (loc[0], loc[1]-1)
+        )
+    #check right
+    if loc[1] < UPPER:
+        lst.append(
+            (loc[0], loc[1]+1)
+        )
 
 def readFromFile(filename, pre, post):
     '''
@@ -71,14 +105,18 @@ def printPretty(param):
     '''
     Print 2D array prettily
     '''
+    retStr = ''
     try:
         if param != []:
             for i in range(len(param)):
                 try:
                     for j in range(len(param[i])):
+                        retStr += str(param[i][j]) + "\t"
                         print(str(param[i][j]) + "\t", end="", sep="\t")
+                    retStr += '\n'
                     print()
                 except TypeError:
                     return
     except AttributeError:
         return
+    return retStr
