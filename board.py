@@ -21,12 +21,13 @@ class Board:
                 print("Board init Failure: You have given an invalid file input.\n")
 
     def stats(self):
-        print("Blank Location: {}".format(self.blank[0]))
-        print("Availability:")
+        print("==========Statistics==========")
+        print("\t->Blank Location: {}".format(self.blank[0]))
+        print("\t->Availability:")
         for i in range (len(self.availability)):
-            print("\t{}".format(self.availability[i]))
-
-
+            print("\t\t\t{}".format(self.availability[i]))
+        print("\t->h(x) = {}".format(compareBoard(self.pre, self.post)))
+        print("=======End of Statistics=======")
 
     def loadBoard(self, filename):
         self.filename = filename

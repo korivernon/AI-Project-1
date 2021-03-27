@@ -2,6 +2,24 @@ BLANK = "BLANK"
 LOWER = 0
 UPPER = 3
 
+def compareBoard(curr, post):
+    '''
+    get the heuristic of the current board when compared to the
+    board at the end
+    :param curr: pre condition/current board
+    :param post: post condition/goal board
+    :return: int
+    '''
+    count = 0
+    for i in range(len(curr)):
+        for j in range(len(curr[i])):
+            if curr[i][j] != post[i][j]:
+                count +=1
+    return count
+
+def swap(cond, before, after):
+    cond[before[0], before[1]], cond[after[0], after[1]] = cond[after[0], after[1]], cond[before[0], before[1]]
+
 def getBlankTup(cond, avail = None):
     '''
     get the precondition or post condition tuple when passed the
