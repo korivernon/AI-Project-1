@@ -13,12 +13,12 @@ def runTests(board):
 
 def main():
     # initialize test board
-    testBoard = Board("test.txt")
-    valid = Board("valid.txt")
-    invalid = Board("invalid.txt")
+    # testBoard = Board("test.txt")
+    # valid = Board("valid.txt")
+    # invalid = Board("invalid.txt")
     # print pretty the pre and post condition
-    valid.stats()
-    valid.printPretty()
+    # valid.stats()
+    # valid.printPretty()
 
     #runTests(testBoard)
 main()
