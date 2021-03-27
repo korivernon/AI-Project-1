@@ -1,57 +1,81 @@
 from function import *
 
+'''
+there needs to be  a change... so basically, the boards should 
+be loaded in... the self.post functionality has to be removed 
+and implemented outside of the function so that we can refer to boards
+arbitrarily INSTEAD of using a list... remove dual functionality in Board 
+class
+'''
 class Board:
-    def __init__(self, filename = ""):
-        self.pre = []
-        self.post = []
-        self.valid = False
+    def __init__(self, board = []):
+        self.pre = board
         self.availability = []
-        if filename != "":
-            self.filename = filename
-            self.valid = readFromFile(filename, self.pre, self.post)
-            if self.valid:
-                self.blank = (getBlankTup(self.pre, self.availability), getBlankTup(self.post))
-        else:
-            self.filename = filename
-            if self.valid == False:
-                self.blank = (
-                    (-1,-1),
-                    (-1,-1)
-                )
-                print("Board init Failure: You have given an invalid file input.\n")
+        self.blank = getBlankTup(self.pre , self.availability)
 
-    def stats(self):
-        print("==========Statistics==========")
-        print("\t->Blank Location: {}".format(self.blank[0]))
-        print("\t->Availability:")
-        for i in range (len(self.availability)):
-            print("\t\t\t{}".format(self.availability[i]))
-        print("\t->h(x) = {}".format(compareBoard(self.pre, self.post)))
-        print("=======End of Statistics=======")
-
-    def loadBoard(self, filename):
-        self.filename = filename
-        self.valid = readFromFile(self.filename, self.pre, self.post)
-        if self.valid:
-            self.blank = (getBlankTup(self.pre), getBlankTup(self.post))
-
-    def printPretty(self, mode= "pp"):
-        '''
-        Print 2D array prettily
-        '''
-        if self.valid == True:
-            if mode == "pp":
-                print("Printing Initial Condition:")
-                printPretty(self.pre)
-                print("Printing Post Condition:")
-                printPretty(self.post)
-            elif mode == "pre":
-                print("Printing Initial Condition:")
-                printPretty(self.pre)
-            else:
-                print("Printing Post Condition:")
-                printPretty(self.post)
-        else:
-            print("printPretty() Error: Improper file input given.")
+    def __str__(self):
+        st = ''
+        for i in range(len(self.pre)):
+            line = self.pre[i]
+            st += "\t".join( [str(x) for x in line] )
+            if i != len(self.pre)-1:
+                st = st + '\n'
+        return st
 
 
+def readFromFile(filename):
+    '''
+    readFromFile is passed a filename in the format
+    that we expect. Everything from the file
+    will be stored in a two dimensional array.
+
+    precondition -> filename
+    postcondition -> 2D data array
+    return: list
+    '''
+    preBoard, postBoard = [],[]
+    inFile = open(filename, "r")
+    count = 0
+    pre =  [];post =[]
+    for line in inFile:
+        count += 1
+        line = line.strip().split(" ")
+        line = parseLine(line) #convert from string to integer
+
+
+        if not checkLine(line):
+            print("\n\t\tRow: {}".format(count))
+            print("\tFilename with error present: {}\n".format(filename))
+        if count < 5:
+            pre.append(line)
+            preBoard += line
+        elif count > 5:
+            post.append(line)
+            postBoard += line
+    # check if boards are valid
+    pre = Board(pre)
+    post = Board(post)
+
+    try:
+        # try popping the blank space
+
+        preBoard.pop(preBoard.index(BLANK)); postBoard.pop(postBoard.index(BLANK))
+        preBoard.sort(); postBoard.sort()
+        # print(preBoard) ; print(postBoard)
+        if not (preBoard == postBoard ):
+            inFile.close()
+            return False
+    except TypeError:
+        doNothing = ""
+    finally:
+        inFile.close()
+        return pre, post
+
+def stats(pre, goal):
+    print("==========Statistics==========")
+    print("\t->Blank Location: {}".format(pre.blank[0]))
+    print("\t->Availability:")
+    for i in range(len(pre.availability)):
+        print("\t\t\t{}".format(pre.availability[i]))
+    print("\t->h(x) = {}".format(compareBoard(pre, goal)))
+    print("=======End of Statistics=======")

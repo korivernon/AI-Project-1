@@ -1,23 +1,13 @@
-from board import Board, printPretty
-PRE = "pre"
-POST = "post"
-
-def runTests(board):
-    '''
-    Test the output of the board
-    '''
-    print("Printing Initial Condition:")
-    printPretty(board.pre)
-    print("Printing Goal Condition:")
-    printPretty(board.post)
+from board import Board, readFromFile, stats
 
 def main():
     # initialize test board
     # testBoard = Board("test.txt")
-    valid = Board("valid.txt")
+    pre, post = readFromFile("valid.txt")
+    print(pre, post, sep="\n")
+    stats(pre, post)
     # invalid = Board("invalid.txt")
     # print pretty the pre and post condition
-    valid.stats()
     # valid.printPretty()
 
     #runTests(testBoard)

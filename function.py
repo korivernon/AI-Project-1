@@ -1,6 +1,28 @@
 BLANK = "BLANK"
 LOWER = 0
 UPPER = 3
+import copy
+from board import *
+
+def makeMove(curr, blank, post, avail):
+    heur = -1
+    boardList = []
+
+    for tup in avail:
+        base = copy.deepcopy(curr) # create a copy
+        temp = swap(base, blank, tup)
+        checker = compareBoard(base, post)
+        if heur == -1:
+            heur = checker
+            boardList.append(temp)
+        elif heur > checker:
+            boardList = temp # completely throw out the  others
+            heur = checker
+        elif heur == checker:
+            boardList.append(temp)
+    for board in boardList:
+        printPretty(board)
+        print()
 
 def compareBoard(curr, post):
     '''
@@ -11,14 +33,15 @@ def compareBoard(curr, post):
     :return: int
     '''
     count = 0
-    for i in range(len(curr)):
-        for j in range(len(curr[i])):
-            if curr[i][j] != post[i][j]:
+    for i in range(len(curr.pre)):
+        for j in range(len(curr.pre[i])):
+            if curr.pre[i][j] != post.pre[i][j]:
                 count +=1
     return count
 
 def swap(cond, before, after):
-    cond[before[0], before[1]], cond[after[0], after[1]] = cond[after[0], after[1]], cond[before[0], before[1]]
+    cond[before[0]][before[1]], cond[after[0]][after[1]] = cond[after[0]][after[1]], cond[before[0]][before[1]]
+    return cond
 
 def getBlankTup(cond, avail = None):
     '''
@@ -31,106 +54,64 @@ def getBlankTup(cond, avail = None):
             if cond[i][j] == BLANK:
                 if (avail != None):
                     #check all sides
-                    checkAvail( (i,j) , cond, avail)
+                    checkAvail( (i,j) , cond)
                 return (i, j)
     return (-1,-1)
 
-def checkAvail(loc, cond, lst ):
+def checkAvail(loc, lst ):
     '''
     :param loc: this is the location that we are checking
     :param cond: this is the condition, either pre or post
     :param lst: this is the return list
     :return: None
     '''
+    retLst = []
+
     #check up
     up = loc[0] > LOWER
     down = loc[0] < UPPER
     left = loc[1] > LOWER
     right = loc[1] < UPPER
     if up:
-        lst.append(
+        retLst.append(
             (loc[0]-1, loc[1])
         )
     #check down
     if down:
-        lst.append(
+        retLst.append(
             (loc[0]+1, loc[1])
         )
     #check left
     if left:
-        lst.append(
+        retLst.append(
             (loc[0], loc[1]-1)
         )
     #check right
     if right:
-        lst.append(
+        retLst.append(
             (loc[0], loc[1]+1)
         )
     # check left up
     if up and left:
-        lst.append(
+        retLst.append(
             (loc[0] - 1, loc[1] -1 )
         )
     #check right up
     if up and right:
-        lst.append(
+        retLst.append(
             (loc[0] - 1, loc[1] + 1 )
         )
     # check left down
     if down and left:
-        lst.append(
+        retLst.append(
             (loc[0] + 1, loc[1] - 1)
         )
     #check right down
     if down and right:
-        lst.append(
+        retLst.append(
             (loc[0] + 1, loc[1] + 1)
         )
-
-def readFromFile(filename, pre, post):
-    '''
-    readFromFile is passed a filename in the format
-    that we expect. Everything from the file
-    will be stored in a two dimensional array.
-
-    precondition -> filename
-    postcondition -> 2D data array
-    return: list
-    '''
-    preBoard, postBoard = [],[]
-    inFile = open(filename, "r")
-    count = 0
-    for line in inFile:
-        count += 1
-        line = line.strip().split(" ")
-        line = parseLine(line) #convert from string to integer
-
-
-        if not checkLine(line):
-            print("\n\t\tRow: {}".format(count))
-            print("\tFilename with error present: {}\n".format(filename))
-        if count < 5:
-            pre.append(line)
-            preBoard += line
-        elif count > 5:
-            post.append(line)
-            postBoard += line
-    # check if boards are valid
-
-    try:
-        # try popping the blank space
-
-        preBoard.pop(preBoard.index(BLANK)); postBoard.pop(postBoard.index(BLANK))
-        preBoard.sort(); postBoard.sort()
-        # print(preBoard) ; print(postBoard)
-        if not (preBoard == postBoard ):
-            inFile.close()
-            return False
-    except TypeError:
-        doNothing = ""
-    finally:
-        inFile.close()
-        return True
+    return retLst
 
 def checkLine(line):
     retBool = True
