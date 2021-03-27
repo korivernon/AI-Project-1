@@ -6,6 +6,7 @@ be loaded in... the self.post functionality has to be removed
 and implemented outside of the function so that we can refer to boards
 arbitrarily INSTEAD of using a list... remove dual functionality in Board 
 class
+... fixed (:
 '''
 class Board:
     def __init__(self, board = []):
