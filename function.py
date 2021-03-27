@@ -2,7 +2,6 @@ BLANK = "BLANK"
 LOWER = 0
 UPPER = 3
 
-
 def getBlankTup(cond, avail = None):
     '''
     get the precondition or post condition tuple when passed the
@@ -90,8 +89,8 @@ def readFromFile(filename, pre, post):
 
 
         if not checkLine(line):
-            print("\n\tRow: {}".format(count))
-            print("Filename with error present: {}\n".format(filename))
+            print("\n\t\tRow: {}".format(count))
+            print("\tFilename with error present: {}\n".format(filename))
         if count < 5:
             pre.append(line)
             preBoard += line
@@ -121,7 +120,7 @@ def checkLine(line):
         num = line[i]
         try:
             if not (num <= 15 and num >= 1):
-                print("Incorrect value(s) given on:\n\tColumn: {}".format(i+1), end="")
+                print("readFromFile() Error:\n\tIncorrect value(s) given on:\n\t\tColumn: {}".format(i+1), end="")
                 retBool = False
         except TypeError:
             continue
