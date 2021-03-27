@@ -4,26 +4,6 @@ UPPER = 3
 import copy
 from board import *
 
-def makeMove(curr, blank, post, avail):
-    heur = -1
-    boardList = []
-
-    for tup in avail:
-        base = copy.deepcopy(curr) # create a copy
-        temp = swap(base, blank, tup)
-        checker = compareBoard(base, post)
-        if heur == -1:
-            heur = checker
-            boardList.append(temp)
-        elif heur > checker:
-            boardList = temp # completely throw out the  others
-            heur = checker
-        elif heur == checker:
-            boardList.append(temp)
-    for board in boardList:
-        printPretty(board)
-        print()
-
 def compareBoard(curr, post):
     '''
     get the heuristic of the current board when compared to the
@@ -39,10 +19,6 @@ def compareBoard(curr, post):
                 count +=1
     return count
 
-def swap(cond, before, after):
-    cond[before[0]][before[1]], cond[after[0]][after[1]] = cond[after[0]][after[1]], cond[before[0]][before[1]]
-    return cond
-
 def getBlankTup(cond, avail = None):
     '''
     get the precondition or post condition tuple when passed the
@@ -54,18 +30,17 @@ def getBlankTup(cond, avail = None):
             if cond[i][j] == BLANK:
                 if (avail != None):
                     #check all sides
-                    checkAvail( (i,j) , cond)
+                    avail = checkAvail( (i,j) , avail)
                 return (i, j)
     return (-1,-1)
 
-def checkAvail(loc, lst ):
+def checkAvail(loc, retLst ):
     '''
     :param loc: this is the location that we are checking
     :param cond: this is the condition, either pre or post
     :param lst: this is the return list
     :return: None
     '''
-    retLst = []
 
     #check up
     up = loc[0] > LOWER

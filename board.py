@@ -1,5 +1,5 @@
 from function import *
-
+import copy
 '''
 there needs to be  a change... so basically, the boards should 
 be loaded in... the self.post functionality has to be removed 
@@ -79,3 +79,31 @@ def stats(pre, goal):
         print("\t\t\t{}".format(pre.availability[i]))
     print("\t->h(x) = {}".format(compareBoard(pre, goal)))
     print("=======End of Statistics=======")
+
+def makeMove(curr, post):
+    heur = -1
+    boardList = []
+    for tup in curr.availability:
+        base = copy.deepcopy(curr.pre) # create a copy
+        temp = swap(base, curr.blank, tup)
+        checker = compareBoard(temp, post)
+        if heur == -1:
+            heur = checker
+            boardList.append(temp)
+        elif heur > checker:
+            boardList = temp # completely throw out the  others
+            heur = checker
+        elif heur == checker:
+            boardList.append(temp)
+    '''
+    # well this took forever and a day
+    for board in boardList:
+        print(board)
+    '''
+
+
+def swap(cond, before, after):
+    cond[before[0]][before[1]], cond[after[0]][after[1]] = cond[after[0]][after[1]], cond[before[0]][before[1]]
+    temp = Board(cond)
+
+    return temp
