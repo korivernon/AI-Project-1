@@ -1,29 +1,84 @@
-from board import Board
+BLANK = "BLANK"
 
-#nothing needs to be used here. this is simply just for processing but
-#feel free to test
-
-def outputBoard(board, depth, num_nodes, sol):
+def getBlankTup(cond):
     '''
-    Lines 1 to 4 contain the tile pattern for the
-    initial state and lines 6 to 9 contain the tile pattern for the goal state.
-
-    Line 5 is a blank line.  n and m are integers that range from 0 to 15. Integer 0 represents a blank position and integers 1  to 15 represent tile numbers.
-
-    Your program will produce an output text file that
-    contains 14 lines  as shown in Figure 2 below.
-
-    Lines 1 to 4 and lines 6 to 9 contain the tile patterns for the initial  and goal states as given in the input file. Lines 5 and 10 are blank lines.
-
-    Line 11 is the depth level  d of the shallowest goal node as found by your search algorithm (assume the root node is at level  0.)
-
-    Line 12 is the total number of nodes N generated in your tree (including the root node.)
-
-     Line  13 contains the solution that you have found.
+    get the precondition or post condition tuple when passed the
+    :param cond: precondition tuple
+    :return: tuple with the coordinates of the blank space
     '''
+    for i in range(len(cond)):
+        for j in range(len(cond[i])):
+            if cond[i] == BLANK:
+                return (i, j)
 
+def readFromFile(filename, pre, post):
     '''
-    Given parameters, output to an output.txt file
+    readFromFile is passed a filename in the format
+    that we expect. Everything from the file
+    will be stored in a two dimensional array.
+
+    precondition -> filename
+    postcondition -> 2D data array
+    return: list
     '''
+    inFile = open(filename, "r")
+    count = 0
+    for line in inFile:
+        count += 1
+        line = line.strip().split(" ")
+        line = parseLine(line) #convert from string to integer
+        if not checkLine(line):
+            print("\n\tRow: {}".format(count))
+            print("Filename with error present: {}\n".format(filename))
+        if count < 5:
+            pre.append(line)
+        elif count > 5:
+            post.append(line)
+    inFile.close()
+    return True
 
+def checkLine(line):
+    retBool = True
+    for i in range(len(line)):
+        num = line[i]
+        try:
+            if not (num <= 15 and num >= 1):
+                print("Incorrect value(s) given on:\n\tColumn: {}".format(i+1), end="")
+                retBool = False
+        except TypeError:
+            continue
+    return retBool
 
+def parseLine(line):
+    '''
+    Given a line, parse the line and
+    convert all of the items to integers
+    if possible
+    precondition -> lst(string)
+    postcondition -> lst(int) if possible
+    return: lst(int) if possible
+    '''
+    for i in range(len(line)):
+        try:
+            line[i] = int(line[i])
+            if line[i] == 0:
+                line[i] = BLANK
+        except ValueError:
+            line[i] = line[i]
+    return line
+
+def printPretty(param):
+    '''
+    Print 2D array prettily
+    '''
+    try:
+        if param != []:
+            for i in range(len(param)):
+                try:
+                    for j in range(len(param[i])):
+                        print(str(param[i][j]) + "\t", end="", sep="\t")
+                    print()
+                except TypeError:
+                    return
+    except AttributeError:
+        return

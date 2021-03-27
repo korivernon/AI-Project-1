@@ -1,5 +1,6 @@
 from board import Board, printPretty
-
+PRE = "pre"
+POST = "post"
 
 def runTests(board):
     '''
@@ -13,7 +14,12 @@ def runTests(board):
 def main():
     # initialize test board
     testBoard = Board("test.txt")
+    valid = Board("valid.txt")
+    invalid = Board("invalid.txt")
     # print pretty the pre and post condition
+    invalid.printPretty()
+    testBoard.printPretty()
+    valid.printPretty()
 
-    runTests(testBoard)
+    #runTests(testBoard)
 main()
