@@ -1,14 +1,7 @@
 from function import *
 import copy
 BLANK = "BLANK"
-'''
-there needs to be  a change... so basically, the boards should 
-be loaded in... the self.post functionality has to be removed 
-and implemented outside of the function so that we can refer to boards
-arbitrarily INSTEAD of using a list... remove dual functionality in Board 
-class
-... fixed (:
-'''
+
 class Board:
     def __init__(self, board = []):
         self.pre = board #pre refers to the board -> pre should be board. changing in the future
