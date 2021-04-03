@@ -1,7 +1,7 @@
 from function import *
 import copy
 BLANK = "BLANK"
-
+#hello :)
 class Board:
     def __init__(self, board = []):
         self.pre = board #pre refers to the board -> pre should be board. changing in the future
