@@ -42,6 +42,7 @@ def readFromFile(filename):
             post.append(line)
             postBoard += line
     try:
+
         preBoard.pop(preBoard.index(BLANK)); postBoard.pop(postBoard.index(BLANK)) # try popping the blank space
         preBoard.sort(); postBoard.sort() #sort the lists then compare
         if not (preBoard == postBoard ):
@@ -63,7 +64,7 @@ def stats(curr, goal):
     :return:
     '''
     print("==========Statistics==========")
-    print("\t->Blank Location: {}".format(curr.blank[0]))
+    print("\t->Blank Location: {}".format(curr.blank))
     print("\t->Availability:")
     for i in range(len(curr.availability)):
         print("\t\t\t{}".format(curr.availability[i]))
@@ -84,14 +85,15 @@ def makeMove(curr, goal):
     for tup in curr.availability:
         base = copy.deepcopy(curr.pre) # create a copy
         temp = swap(base, curr.blank, tup)
-        checker = compareBoard(temp, goal)
+        nextHeur = compareBoard(temp, goal)
         if heur == -1:
-            heur = checker
+            heur = nextHeur
             boardList.append(temp)
-        elif heur > checker:
-            boardList = temp # completely throw out the  others
-            heur = checker
-        elif heur == checker:
+        elif heur > nextHeur:
+            boardList = [] # completely throw out the others
+            boardList.append(temp)
+            heur = nextHeur
+        elif heur == nextHeur:
             boardList.append(temp)
     '''
     # well this took forever and a day
