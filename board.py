@@ -7,6 +7,8 @@ class Board:
         self.pre = board #pre refers to the board -> pre should be board. changing in the future
         self.availability = [] #list of tuples with available spaces that the space can move
         self.blank = getBlankTup(self.pre , self.availability) #get the blank tuple if possible and determine avail
+        self.H = 0
+        self.G = 0
 
     def __str__(self):
         st = ''
