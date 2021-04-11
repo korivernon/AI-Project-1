@@ -191,7 +191,8 @@ def readFromFile(filename):
     try:
         lenBoard = len(postBoard)-1
     except IndexError:
-        lenBoard = 'null'
+        if lenBoard > 15:
+            lenBoard = 'null'
     finally:
         # check if boards are valid
         pre = Board(pre); post = Board(post) #create board objects
