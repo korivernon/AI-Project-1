@@ -1,5 +1,6 @@
 from function import *
 import copy
+import numpy as np
 BLANK = "BLANK"
 
 class Board:
