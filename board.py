@@ -47,10 +47,10 @@ class Node:
 # return_path function will return the path of the search
 def return_path(curr_node, board):
     path = []
-    #no_rows, no_columns = reshape(board, shape)
-    no_rows, no_columns = np.shape(board)
+    #rows, columns = reshape(board, shape)
+    rows, columns = np.shape(board)
     #initializing the result board maze with -1 in every position
-    result = [[-1 for i in range (no_columns)] for j in range (no_rows)]
+    result = [[-1 for i in range (columns)] for j in range (rows)]
     current = curr_node
     while current is not None:
         path.append(current.position)
@@ -88,8 +88,8 @@ def search(board, cost, start, end):
     # this represents the search movements of every position : go up, go left, go down, go right
     move = [[-1,0],[0,-1], [1,0], [0,1]]
 
-    no_rows, no_columns = np.shape(board)
-    #no_rows, no_columns = reshape(board, shape)
+    rows, columns = np.shape(board)
+    #rows, columns = reshape(board, shape)
 
     # loop that will continue until it reaches the end of the board
     while len(yet_to_visit_list) > 0:
@@ -125,8 +125,8 @@ def search(board, cost, start, end):
                              curr_node.position[1] + new_position[1])
 
             # Checking if they are within range or not
-            if (node_position[0] > (no_rows -1) or node_position[0] < 0
-                    or node_position[1] > (no_columns-1) or node_position[1] < 0):
+            if (node_position[0] > (rows -1) or node_position[0] < 0
+                    or node_position[1] > (columns-1) or node_position[1] < 0):
                 continue
 
             if board[node_position[0]][node_position[1]] != 0:
