@@ -1,8 +1,8 @@
 from function import *
 import copy
-from functools import reduce
-from operator import mul
-#import numpy as np
+#from functools import reduce
+#from operator import mul
+import numpy as np
 BLANK = "BLANK"
 
 class Board:
@@ -38,16 +38,17 @@ class Node:
         return self.position == other.position
 
 # function to reshape list instead of using numpy
-def reshape(lst, shape):
-    if len(shape) == 1:
-        return lst
-    n = reduce(mul, shape[1:])
-    return [reshape(lst[i*n:(i+1)*n], shape[1:]) for i in range(len(lst)//n)]
+#def reshape(lst, shape):
+    #if len(shape) == 1:
+        #return lst
+    #n = reduce(mul, shape[1:])
+    #return [reshape(lst[i*n:(i+1)*n], shape[1:]) for i in range(len(lst)//n)]
 
 # return_path function will return the path of the search
 def return_path(curr_node, board):
     path = []
-    no_rows, no_columns = reshape(board, shape)
+    #no_rows, no_columns = reshape(board, shape)
+    no_rows, no_columns = np.shape(board)
     #initializing the result board maze with -1 in every position
     result = [[-1 for i in range (no_columns)] for j in range (no_rows)]
     current = curr_node
@@ -87,8 +88,8 @@ def search(board, cost, start, end):
     # this represents the search movements of every position : go up, go left, go down, go right
     move = [[-1,0],[0,-1], [1,0], [0,1]]
 
-
-    no_rows, no_columns = reshape(board, shape)
+    no_rows, no_columns = np.shape(board)
+    #no_rows, no_columns = reshape(board, shape)
 
     # loop that will continue until it reaches the end of the board
     while len(yet_to_visit_list) > 0:
