@@ -1,6 +1,8 @@
 from function import *
 import copy
-import numpy as np
+from functools import reduce
+from operator import mul
+#import numpy as np
 BLANK = "BLANK"
 
 class Board:
@@ -19,92 +21,137 @@ class Board:
         return st
 
 # Used for A* Implementation
+#   parent represents the parent of the current Node
+#   position represents the current position of the Node on the board
+#   g is cost from start to current Node
+#   h is heuristic based estimated cost for the current Node to end Node
+#   f is total cost of present node i.e. : f(n) = g(n) + h(n)
 class Node:
     def __init__(self, parent=None, position=None):
         self.parent = parent
         self.position = position
-        self.g = 0
         self.f = 0
+        self.g = 0
         self.h = 0
+
     def __eq__(self, other):
         return self.position == other.position
 
-def return_path(current_node, board):
+# function to reshape list instead of using numpy
+def reshape(lst, shape):
+    if len(shape) == 1:
+        return lst
+    n = reduce(mul, shape[1:])
+    return [reshape(lst[i*n:(i+1)*n], shape[1:]) for i in range(len(lst)//n)]
+
+# return_path function will return the path of the search
+def return_path(curr_node, board):
     path = []
-    no_rows, no_columns =
+    no_rows, no_columns = reshape(board, shape)
+    #initializing the result board maze with -1 in every position
     result = [[-1 for i in range (no_columns)] for j in range (no_rows)]
-    current = current_node
+    current = curr_node
     while current is not None:
         path.append(current.position)
         current = current.parent
+    # return the reversed path to show start to end
     path = path[::-1]
     start_value = 0
+    # updating the path of the A* implementation by incrementing by 1
     for i in range(len(path)):
         result[path[i][0]][path[i][1]] = start_value
         start_value += 1
     return result
 
+# search function will return a list of tuples as a path from given start to end
 def search(board, cost, start, end):
+    # initializing values of g, h, and f
     start_node = Node(None, tuple(start))
     start_node.g = start_node.h = start_node.f = 0
     end_node = Node(None, tuple(end))
     end_node.g = end_node.h = end_node.f = 0
+
+    # all nodes that have yet to be visited will be placed here
     yet_to_visit_list = []
+
+    # all nodes that have already been visited will be placed here to avoid redundancy
     visited_list = []
+
+    # adding the start nde to the beginning
     yet_to_visit_list.append(start_node)
+
+    # stop condition to avoid an infinite loop
     outer_iterations = 0
     max_iterations = (len(board) // 2) ** 10
 
-    #go up, go left, go down, go right
+    # this represents the search movements of every position : go up, go left, go down, go right
     move = [[-1,0],[0,-1], [1,0], [0,1]]
 
-    no_rows, no_columns = np.shape(board)
 
+    no_rows, no_columns = reshape(board, shape)
+
+    # loop that will continue until it reaches the end of the board
     while len(yet_to_visit_list) > 0:
         outer_iterations += 1
 
-        current_node = yet_to_visit_list[0]
-        current_index = 0
+        # current node
+        curr_node = yet_to_visit_list[0]
+        curr_index = 0
         for index, item in enumerate(yet_to_visit_list):
-            if item.f < current_node.f:
-                current_node = item
-                current_index = index
+            if item.f < curr_node.f:
+                curr_node = item
+                curr_index = index
 
         if outer_iterations > max_iterations:
             print("Done pathfinding, too many iterations occurred")
-            return return_path(current_node,board)
+            return return_path(curr_node,board)
 
-        yet_to_visit_list.pop(current_index)
-        visited_list.append(current_node)
+        # removing the current node from yet_to_visit_list
+        yet_to_visit_list.pop(curr_index)
+        # appending it to the visited list to avoid visting that node again
+        visited_list.append(curr_node)
 
-        if current_node == end_node:
-            return return_path(current_node, board)
+        # if the goal has been reached then return the path, otherwise keep going
+        if curr_node == end_node:
+            return return_path(curr_node, board)
 
         # Generate children from all adjacent squares
         children = []
         for new_position in move:
-            node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
-            if (node_position[0] > (no_rows -1) or node_position[0] < 0 or node_position[1] > (no_columns-1) or node_position[1] < 0):
+
+            # Node position
+            node_position = (curr_node.position[0] + new_position[0],
+                             curr_node.position[1] + new_position[1])
+
+            # Checking if they are within range or not
+            if (node_position[0] > (no_rows -1) or node_position[0] < 0
+                    or node_position[1] > (no_columns-1) or node_position[1] < 0):
                 continue
 
             if board[node_position[0]][node_position[1]] != 0:
                 continue
 
-            new_node = Node(current_node, node_position)
+            # creating a new node and appending it to children
+            new_node = Node(curr_node, node_position)
             children.append(new_node)
 
+            # Iterate through children
             for child in children:
+                # If child is in visited_list then search
                 if len([visited_child for visited_child in visited_list if visited_child == child]) > 0:
                     continue
 
-                child.g = current_node.g + cost
-                child.h = (((child.position[0] - end_node.posiiton[0]) ** 2) +((child.position[1] - end_node.position[1]) ** 2))
+                # once again initializing f,g, and h values
+                child.g = curr_node.g + cost
 
+                # calculating the heuristic cost
+                child.h = (((child.position[0] - end_node.posiiton[0]) ** 2) +
+                           ((child.position[1] - end_node.position[1]) ** 2))
                 child.f = child.g + child.h
 
+                # If child is already in yet_to_visit_list and g cost is lower, append
                 if len([i for i in yet_to_visit_list if child == i and child.g > i.g]) > 0:
                     continue
-
                 yet_to_visit_list.append(child)
 
 
