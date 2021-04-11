@@ -18,6 +18,7 @@ class Board:
                 st = st + '\n'
         return st
 
+# Used for A* Implementation
 class Node:
     def __init__(self, parent=None, position=None):
         self.parent = parent
