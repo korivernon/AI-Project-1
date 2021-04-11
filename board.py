@@ -50,6 +50,10 @@ def readFromFile(filename):
             return False
     except TypeError:
         pass
+    try:
+        lenBoard = len(postBoard)-1
+    except IndexError:
+        lenBoard = 'null'
     finally:
         # check if boards are valid
         pre = Board(pre); post = Board(post) #create board objects
