@@ -41,9 +41,22 @@ def return_path(current_node, maze):
         result[path[i][0]][path[i][1]] = start_value
         start_value += 1
     return result
+
 def search(maze, cost, start, end):
     start_node = Node(None, tuple(start))
     start_node.g = start_node.h = start_node.f = 0
+    end_node = Node(None, tuple(end))
+    end_node.g = end_node.h = end_node.f = 0
+    yet_to_visit_list = []
+    visited_list = []
+    yet_to_visit_list.append(start_node)
+    outer_iterations = 0
+    max_iterations = (len(maze) // 2) ** 10
+
+    #go up, go left, go down, go right
+    move = [[-1,0],[0,-1], [1,0], [0,1]]
+
+
 
 def readFromFile(filename):
     '''
