@@ -7,8 +7,6 @@ class Board:
         self.pre = board #pre refers to the board -> pre should be board. changing in the future
         self.availability = [] #list of tuples with available spaces that the space can move
         self.blank = getBlankTup(self.pre , self.availability) #get the blank tuple if possible and determine avail
-        self.H = 0
-        self.G = 0
 
     def __str__(self):
         st = ''
@@ -18,6 +16,16 @@ class Board:
             if i != len(self.pre)-1:
                 st = st + '\n'
         return st
+
+class Node:
+    def __init__(self, parent=None, position=None):
+        self.parent = parent
+        self.position = position
+        self.g = 0
+        self.f = 0
+        self.h = 0
+    def __eq__(self, other):
+        return self.position == other.position
 
 
 def readFromFile(filename):
