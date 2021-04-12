@@ -201,7 +201,7 @@ def readFromFile(filename):
     except TypeError:
         pass
     try:
-        lenBoard = len(postBoard)-1
+        lenBoard = len(postBoard)
     except IndexError:
         if lenBoard > 15:
             lenBoard = 'null'
