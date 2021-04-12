@@ -49,12 +49,14 @@ class Board:
                 h += abs(x-i) + abs(y-j)
         return h
 
-# Used for A* Implementation
-#   parent represents the parent of the current Node
-#   position represents the current position of the Node on the board
-#   g is cost from start to current Node
-#   h is heuristic based estimated cost for the current Node to end Node
-#   f is total cost of present node i.e. : f(n) = g(n) + h(n)
+'''
+Used for A* Implementation
+   parent represents the parent of the current Node
+   position represents the current position of the Node on the board
+   g is cost from start to current Node
+   h is heuristic based estimated cost for the current Node to end Node
+   f is total cost of present node i.e. : f(n) = g(n) + h(n)
+'''
 
 # return_path function will return the path of the search
 def return_path(curr_node, board):
