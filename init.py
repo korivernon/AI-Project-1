@@ -14,6 +14,7 @@ def main():
     stats(pre, post)
     makeMove(pre, post)
 
+
     # print pretty the pre and post condition
     # valid.printPretty()
 
