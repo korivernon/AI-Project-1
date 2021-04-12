@@ -38,10 +38,11 @@ def main():
             numMoves +=1
             t = t.parent
 
-    output(pre, post, numMoves, nodes)
+    st = "{}\n\n{}\n\n{}".format(pre, post, numMoves)
+    print(st)
 
-    stats(pre, post)
-    makeMove(pre, post)
+    #stats(pre, post)
+    #makeMove(pre, post)
 
 
     # print pretty the pre and post condition
