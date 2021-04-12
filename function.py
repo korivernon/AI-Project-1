@@ -41,8 +41,9 @@ def checkAvail(loc, retLst ):
     :param lst: this is the return list
     :return: None
     '''
+    retDict = {}
 
-    #check up
+    #check upZ
     up = loc[0] > LOWER
     down = loc[0] < UPPER
     left = loc[1] > LOWER
@@ -51,41 +52,49 @@ def checkAvail(loc, retLst ):
         retLst.append(
             (loc[0]-1, loc[1])
         )
+        retDict[3] = retLst[-1]
     #check down
     if down:
         retLst.append(
             (loc[0]+1, loc[1])
         )
+        retDict[7] = retLst[-1]
     #check left
     if left:
         retLst.append(
             (loc[0], loc[1]-1)
         )
+        retDict[1] = retLst[-1]
     #check right
     if right:
         retLst.append(
             (loc[0], loc[1]+1)
         )
+        retDict[5] = retLst[-1]
     # check left up
     if up and left:
         retLst.append(
             (loc[0] - 1, loc[1] -1 )
         )
+        retDict[2] = retLst[-1]
     #check right up
     if up and right:
         retLst.append(
             (loc[0] - 1, loc[1] + 1 )
         )
+        retDict[4] = retLst[-1]
     # check left down
     if down and left:
         retLst.append(
             (loc[0] + 1, loc[1] - 1)
         )
+        retDict[8] = retLst[-1]
     #check right down
     if down and right:
         retLst.append(
             (loc[0] + 1, loc[1] + 1)
         )
+        retDict[6] = retLst[-1]
     return retLst
 
 def checkLine(line):
