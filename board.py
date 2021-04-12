@@ -26,10 +26,18 @@ class Board:
         return st
 
     def __eq__(self, other):
-        return self.position == other.position
+        return self.pre == other.pre
 
     def getAvailability(self):
         self.blank = getBlankTup(self.pre , self.availability) #get the blank tuple if possible and determine avail
+
+    def manhattan(self):
+        h = 0
+        for i in range(len(self.pre)):
+            for j in range(len(self.pre)):
+                x, y = divmod(self.pre[i][j], 3)
+                h += abs(x-i) + abs(y-j)
+        return h
 
 # Used for A* Implementation
 #   parent represents the parent of the current Node
@@ -239,6 +247,17 @@ def makeMove(curr, goal):
     '''
     return boardList
 
+def best_fvalue(openList):
+    f = openList[0].f
+    index = 0
+    for i, item in enumerate(openList):
+        if i == 0:
+            continue
+        if(item.f < f):
+            f = item.f
+            index  = i
+
+    return openList[index], index
 
 def swap(cond, before, after):
     '''
@@ -251,3 +270,46 @@ def swap(cond, before, after):
     cond[before[0]][before[1]], cond[after[0]][after[1]] = cond[after[0]][after[1]], cond[before[0]][before[1]]
     temp = Board(cond)
     return temp
+
+def compare(curr, goal):
+    return curr.pre == goal.pre
+
+def AStar(start, goal):
+    openList = []
+    closedList = []
+    openList.append(start)
+
+    while openList:
+        current, index = best_fvalue(openList)
+        if compare(current, goal):
+            return current
+        openList.pop(index)
+        closedList.append(current)
+
+        X = makeMove(current, goal)
+        for move in X:
+            ok = False   #checking in closedList
+            for i, item in enumerate(closedList):
+                if item == move:
+                    ok = True
+                    break
+            if not ok:              #not in closed list
+                newG = current.g + 1
+                present = False
+
+                #openList includes move
+                for j, item in enumerate(openList):
+                    if item == move:
+                        present = True
+                        if newG < openList[j].g:
+                            openList[j].g = newG
+                            openList[j].f = openList[j].g + openList[j].h
+                            openList[j].parent = current
+                if not present:
+                    move.g = newG
+                    move.h = move.manhattan()
+                    move.f = move.g + move.h
+                    move.parent = current
+                    openList.append(move)
+
+    return None
