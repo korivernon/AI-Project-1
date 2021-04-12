@@ -1,7 +1,5 @@
 from function import *
 import copy
-#from functools import reduce
-#from operator import mul
 import numpy as np
 BLANK = 0
 
@@ -49,12 +47,14 @@ class Board:
                 h += abs(x-i) + abs(y-j)
         return h
 
-# Used for A* Implementation
-#   parent represents the parent of the current Node
-#   position represents the current position of the Node on the board
-#   g is cost from start to current Node
-#   h is heuristic based estimated cost for the current Node to end Node
-#   f is total cost of present node i.e. : f(n) = g(n) + h(n)
+'''
+Used for A* Implementation
+   parent represents the parent of the current node
+   position represents the current position of the node on the board
+   g is cost from start to current node
+   h is heuristic based estimated cost for the current node to end node
+   f is total cost of present node i.e. : f(n) = g(n) + h(n)
+'''
 
 # return_path function will return the path of the search
 def return_path(curr_node, board):
@@ -99,8 +99,10 @@ def search(board, cost, start, end):
     max_iterations = (len(board) // 2) ** 10
 
     # this represents the search movements of every position : go up, go left, go down, go right, diagonals
-    move = [[-1,0],[0,-1], [1,0], [0,1], [-1,-1],[-1,1],[1,-1], [1,1]]
+    move = [[-1, 0], [0, -1], [1, 0], [0, 1],
+            [-1, -1], [-1, 1], [1, -1], [1, 1]]
 
+    # assigns the dimension of the board to rows and columns
     rows, columns = np.shape(board.pre)
 
     # loop that will continue until it reaches the end of the board
@@ -117,7 +119,7 @@ def search(board, cost, start, end):
 
         if outer_iterations > max_iterations:
             print("Done pathfinding, too many iterations occurred")
-            return return_path(curr_node,board)
+            return return_path(curr_node, board)
 
         # removing the current node from yet_to_visit_list
         yet_to_visit_list.pop(curr_index)
@@ -175,13 +177,13 @@ def readFromFile(filename):
     will be stored in a two dimensional array.
     :return: ( <Board> , <Board> )
     '''
-    preBoard, postBoard = [],[]
+    preBoard, postBoard = [], []
     inFile = open(filename, "r")
     count = 0
-    pre =  [];post =[]
+    pre = [] ; post = []
     for line in inFile:
         count += 1
-        line = line.strip().split(); line = parseLine(line) #split by space and convert from string to integer
+        line = line.strip().split() ; line = parseLine(line) # split by space and convert from string to integer
         if not checkLine(line):
             print("\n\t\tRow: {}".format(count))
             print("\tFilename with error present: {}\n".format(filename))
@@ -194,20 +196,20 @@ def readFromFile(filename):
     try:
 
         preBoard.pop(preBoard.index(BLANK)); postBoard.pop(postBoard.index(BLANK)) # try popping the blank space
-        preBoard.sort(); postBoard.sort() #sort the lists then compare
-        if not (preBoard == postBoard ):
+        preBoard.sort(); postBoard.sort() # sort the lists then compare
+        if not (preBoard == postBoard):
             inFile.close()
             return False
     except TypeError:
         pass
     try:
-        lenBoard = len(postBoard)-1
+        lenBoard = len(postBoard)
     except IndexError:
         if lenBoard > 15:
             lenBoard = 'null'
     finally:
         # check if boards are valid
-        pre = Board(pre); post = Board(post) #create board objects
+        pre = Board(pre); post = Board(post) # create board objects
         inFile.close()
         return pre, post #return tuple
 
@@ -307,6 +309,12 @@ def AStar(start, goal):
             ok = False   #checking in closedList
             for i, item in enumerate(closedList):
                 if item == move:
+                    '''
+                    # Need to use a dictionary so that if ok = True, then we append 
+                    the dictionary key to a list, then return that list to init.py
+                    # Need a function to compare the current node to the previous 
+                    constantly in the while t loop
+                    '''
                     ok = True
                     break
             if not ok:              #not in closed list
