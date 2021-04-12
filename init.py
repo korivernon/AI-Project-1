@@ -8,7 +8,14 @@ SO = "inp/Sample_Output.txt"
 left = 1;left_up = 2;up = 3; right_up = 4; right = 5; right_down = 6; down = 7; left_down = 8
 
 def determine_move(prev,next):
-    pass
+    '''
+
+    :param prev: the previous board
+    :param next: the next board
+    :return: the direction in which the play moved
+    '''
+
+    return None
 
 def output(pre, post, nodes, len):
     outFile = "{}\n\n{}\n\n{}\n{}".format(pre, post, nodes, len)
@@ -38,17 +45,20 @@ def main():
         print("No soln")
     else:
         #print(result.pre)
+
         t = result.parent
+        prev = t
         while t:
             numMoves +=1
-            print(t.pre)
+            #print(t.pre)
             t = t.parent
-
-            try:
-                continue
-                print(t.f)
-            except AttributeError:
-                continue
+            next = t
+            print("prev:\n{}\n\nnext:\n{}".format(prev, next))
+            # try:
+            #     continue
+            #     print(t.f)
+            # except AttributeError:
+            #     continue
     output(pre, post, numMoves, nodes)
 
     # stats(pre, post)
