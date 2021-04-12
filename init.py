@@ -19,12 +19,12 @@ def main():
     # testBoard = Board("test.txt")
 
     pre, post = readFromFile(SO)
-    print(pre, post, sep="\n\n")
+    #print(pre, post, sep="\n\n")
 
     result, nodes= AStar(pre, post)
     numMoves = 0
 
-    print("goal:\n{}\npre:\n{}".format(post, pre))
+    #print("goal:\n{}\npre:\n{}".format(post, pre))
 
 
     if (not result):
