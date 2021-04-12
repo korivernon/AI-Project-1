@@ -55,28 +55,6 @@ Used for A* Implementation
    h is heuristic based estimated cost for the current node to end node
    f is total cost of present node i.e. : f(n) = g(n) + h(n)
 '''
-
-# return_path function will return the path of the search
-def return_path(curr_node, board):
-    path = []
-
-    rows, columns = np.shape(board.pre)
-
-    #initializing the result board maze with -1 in every position
-    result = [[-1 for i in range (columns)] for j in range (rows)]
-    current = curr_node
-    while current is not None:
-        path.append(current.position)
-        current = current.parent
-    # return the reversed path to show start to end
-    path = path[::-1]
-    start_value = 0
-    # updating the path of the A* implementation by incrementing by 1
-    for i in range(len(path)):
-        result[path[i][0]][path[i][1]] = start_value
-        start_value += 1
-    return result
-
 def readFromFile(filename):
     '''
     readFromFile is passed a filename in the format

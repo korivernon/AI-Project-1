@@ -7,19 +7,11 @@ SO = "inp/Sample_Output.txt"
 
 left = 1;left_up = 2;up = 3; right_up = 4; right = 5; right_down = 6; down = 7; left_down = 8
 
-def determine_move(prev,next):
-    '''
-
-    :param prev: the previous board
-    :param next: the next board
-    :return: the direction in which the play moved
-    '''
-
-    return None
-
+'''
 def output(pre, post, nodes, len):
     outFile = "{}\n\n{}\n\n{}\n{}".format(pre, post, nodes, len)
     print(outFile)
+'''
 '''
     Need to use a dictionary so that if flag = True, then we append 
         the dictionary key to a list, then return that list to init.py
@@ -40,7 +32,7 @@ def main():
     result, nodes= AStar(pre, post)
     numMoves = 0
 
-    print("goal:\n{}".format(post))
+    print("goal:\n{}\npre:\n{}".format(post, pre))
 
 
     if (not result):
@@ -52,17 +44,15 @@ def main():
         prev = t
         while t:
             numMoves +=1
-            #print(t.pre)
+            print(t)
+            print()
             t = t.parent
-            next = t
-            print("prev:\n{}\n\nnext:\n{}".format(prev, next))
-            prev = next
             # try:
             #     continue
             #     print(t.f)
             # except AttributeError:
             #     continue
-    output(pre, post, numMoves, nodes)
+    #output(pre, post, numMoves, nodes)
 
     # stats(pre, post)
     # makeMove(pre, post)
