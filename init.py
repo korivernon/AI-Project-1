@@ -40,6 +40,8 @@ def main():
     result, nodes= AStar(pre, post)
     numMoves = 0
 
+    print("goal:\n{}".format(post))
+
 
     if (not result):
         print("No soln")
@@ -54,6 +56,7 @@ def main():
             t = t.parent
             next = t
             print("prev:\n{}\n\nnext:\n{}".format(prev, next))
+            prev = next
             # try:
             #     continue
             #     print(t.f)
