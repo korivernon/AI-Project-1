@@ -49,7 +49,7 @@ class Board:
                 h += abs(x-i) + abs(y-j)
                 h += abs(x-i) + abs(y-j)
         return h
-
+'''
 def manhattan_sum(curr, goal):
     h = 0
     for i in range(len(curr.pre)):
@@ -58,6 +58,16 @@ def manhattan_sum(curr, goal):
             h += abs(curr.pre[i][j]) + abs(goal.pre[i][j])
     h = math.sqrt(h)
     return h
+'''
+
+def calculateManhattan(curr, goal):
+    initial_config = curr.pre
+    manDict = 0
+    for i,item in enumerate(initial_config):
+        prev_row,prev_col = int(i/ 4) , i % 4
+        goal_row,goal_col = int(item /4),item % 4
+        manDict += abs(prev_row-goal_row) + abs(prev_col - goal_col)
+    return manDict
 '''
 Used for A* Implementation
    parent represents the parent of the current node
