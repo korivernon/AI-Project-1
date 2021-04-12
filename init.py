@@ -19,18 +19,18 @@ def main():
     # testBoard = Board("test.txt")
 
     pre, post = readFromFile(SO)
-    #print(pre, post, sep="\n\n")
+    print(pre, post, sep="\n\n")
 
     result, nodes= AStar(pre, post)
     numMoves = 0
 
-    #print("goal:\n{}\npre:\n{}".format(post, pre))
+    print("goal:\n{}\npre:\n{}".format(post, pre))
 
 
     if (not result):
         print("No soln")
     else:
-        #print(result.pre)
+        print(result.pre)
 
         t = result.parent
         prev = t
@@ -38,10 +38,10 @@ def main():
             numMoves +=1
             t = t.parent
 
-    #output(pre, post, numMoves, nodes)
+    output(pre, post, numMoves, nodes)
 
-    # stats(pre, post)
-    # makeMove(pre, post)
+    stats(pre, post)
+    makeMove(pre, post)
 
 
     # print pretty the pre and post condition
