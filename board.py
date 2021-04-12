@@ -48,7 +48,8 @@ class Node:
 def return_path(curr_node, board):
     path = []
     #rows, columns = reshape(board, shape)
-    rows, columns = np.shape(board)
+    rows, columns = np.shape(board.pre)
+
     #initializing the result board maze with -1 in every position
     result = [[-1 for i in range (columns)] for j in range (rows)]
     current = curr_node
@@ -86,9 +87,9 @@ def search(board, cost, start, end):
     max_iterations = (len(board) // 2) ** 10
 
     # this represents the search movements of every position : go up, go left, go down, go right
-    move = [[-1,0],[0,-1], [1,0], [0,1]]
+    move = [[-1,0],[0,-1], [1,0], [0,1], [-1,-1],[-1,1],[1,-1], [1,1]]
 
-    rows, columns = np.shape(board)
+    rows, columns = np.shape(board.pre)
     #rows, columns = reshape(board, shape)
 
     # loop that will continue until it reaches the end of the board
