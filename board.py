@@ -80,7 +80,7 @@ def search(board, cost, start, end):
     outer_iterations = 0
     max_iterations = (len(board) // 2) ** 10
 
-    # this represents the search movements of every position : go up, go left, go down, go right
+    # this represents the search movements of every position : go up, go left, go down, go right, diagonals
     move = [[-1,0],[0,-1], [1,0], [0,1], [-1,-1],[-1,1],[1,-1], [1,1]]
 
     rows, columns = np.shape(board.pre)
