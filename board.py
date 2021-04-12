@@ -1,7 +1,5 @@
 from function import *
 import copy
-#from functools import reduce
-#from operator import mul
 import numpy as np
 BLANK = 0
 
