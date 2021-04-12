@@ -151,11 +151,6 @@ def makeMove(curr, goal):
         elif heur == nextHeur:
             boardList.append(temp)
             curr.nodes += 1
-    '''
-    # well this took forever and a day
-    for board in boardList:
-        print(board)
-    '''
     return boardList
 
 def best_fvalue(openList):
