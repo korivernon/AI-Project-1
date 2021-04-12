@@ -30,7 +30,7 @@ def main():
     if (not result):
         print("No soln")
     else:
-        print(result.pre)
+        #print(result.pre)
 
         t = result.parent
         prev = t
