@@ -36,7 +36,7 @@ def main():
                 print(t.f)
             except AttributeError:
                 continue
-    output(pre, post, nodes, numMoves)
+    output(pre, post, numMoves, nodes)
 
     # stats(pre, post)
     # makeMove(pre, post)
