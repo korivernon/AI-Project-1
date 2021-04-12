@@ -20,6 +20,9 @@ class Board:
                 st = st + '\n'
         return st
 
+    def getAvailability(self):
+        self.blank = getBlankTup(self.pre , self.availability) #get the blank tuple if possible and determine avail
+
 # Used for A* Implementation
 #   parent represents the parent of the current Node
 #   position represents the current position of the Node on the board
