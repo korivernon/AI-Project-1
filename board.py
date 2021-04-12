@@ -3,7 +3,7 @@ import copy
 #from functools import reduce
 #from operator import mul
 import numpy as np
-BLANK = "BLANK"
+BLANK = 0
 
 class Board:
     def __init__(self, board = []):

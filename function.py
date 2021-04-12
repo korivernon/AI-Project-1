@@ -1,4 +1,4 @@
-BLANK = "BLANK"
+BLANK = 0
 LOWER = 0
 UPPER = 3
 import copy
