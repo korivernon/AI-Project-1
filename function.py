@@ -93,7 +93,7 @@ def checkLine(line):
     for i in range(len(line)):
         num = line[i]
         try:
-            if not (num <= 15 and num >= 1):
+            if not (num <= 15 and num >= 0):
                 print("readFromFile() Error:\n\tIncorrect value(s) given on:\n\t\tColumn: {}".format(i+1), end="")
                 retBool = False
         except TypeError:
