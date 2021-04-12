@@ -20,7 +20,8 @@ def output(pre, post, nodes, len):
         constantly in the while t loop
 '''
 def compare():
-
+    if (True):
+        print("blah")
 
 def main():
     # initialize test board
