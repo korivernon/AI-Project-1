@@ -70,9 +70,9 @@ def return_path(curr_node, board):
 # search function will return a list of tuples as a path from given start to end
 def search(board, cost, start, end):
     # initializing values of g, h, and f
-    start_node = Node(None, tuple(start))
+    start_node = Board(None, tuple(start))
     start_node.g = start_node.h = start_node.f = 0
-    end_node = Node(None, tuple(end))
+    end_node = Board(None, tuple(end))
     end_node.g = end_node.h = end_node.f = 0
 
     # all nodes that have yet to be visited will be placed here
@@ -135,7 +135,7 @@ def search(board, cost, start, end):
                 continue
 
             # creating a new node and appending it to children
-            new_node = Node(curr_node, node_position)
+            new_node = Board(curr_node, node_position)
             children.append(new_node)
 
             # Iterate through children
