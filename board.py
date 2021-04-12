@@ -41,7 +41,7 @@ class Board:
 # return_path function will return the path of the search
 def return_path(curr_node, board):
     path = []
-    #rows, columns = reshape(board, shape)
+
     rows, columns = np.shape(board.pre)
 
     #initializing the result board maze with -1 in every position
@@ -84,7 +84,6 @@ def search(board, cost, start, end):
     move = [[-1,0],[0,-1], [1,0], [0,1], [-1,-1],[-1,1],[1,-1], [1,1]]
 
     rows, columns = np.shape(board.pre)
-    #rows, columns = reshape(board, shape)
 
     # loop that will continue until it reaches the end of the board
     while len(yet_to_visit_list) > 0:
