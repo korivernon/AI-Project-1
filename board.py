@@ -2,6 +2,7 @@ from function import *
 import copy
 import numpy as np
 BLANK = 0
+import math
 
 class Board:
     def __init__(self, board = [], parent= None, position = None):
@@ -44,9 +45,19 @@ class Board:
         for i in range(len(self.pre)):
             for j in range(len(self.pre)):
                 x, y = divmod(self.pre[i][j], 3)
+                #print(x, y, len(self.pre))
+                h += abs(x-i) + abs(y-j)
                 h += abs(x-i) + abs(y-j)
         return h
 
+def manhattan_sum(curr, goal):
+    h = 0
+    for i in range(len(curr.pre)):
+        for j in range(len(curr.pre)):
+
+            h += abs(curr.pre[i][j]) + abs(goal.pre[i][j])
+    h = math.sqrt(h)
+    return h
 '''
 Used for A* Implementation
    parent represents the parent of the current node
@@ -177,10 +188,13 @@ def compare(curr, goal):
 def AStar(start, goal):
     openList = []
     closedList = []
+    print("start\n" + str(start))
+    #print(type(start))
     openList.append(start)
 
     numNodes = 0
     while openList:
+        print(openList[0])
         current, index = best_fvalue(openList)
         if compare(current, goal):
             #print(numNodes)
@@ -211,6 +225,7 @@ def AStar(start, goal):
                 if not present:
                     move.g = newG
                     move.h = move.manhattan()
+                    #print(move.h)
                     move.f = move.g + move.h
                     move.parent = current
                     openList.append(move)
