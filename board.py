@@ -12,11 +12,21 @@ class Board:
         self.blank = getBlankTup(self.pre , self.availability) #get the blank tuple if possible and determine avail
         self.parent = parent
         self.position = position
+        self.nodes = 0
         self.f = 0
         self.g = 0
         self.h = 0
 
     def __str__(self):
+        st = ''
+        for i in range(len(self.pre)):
+            line = self.pre[i]
+            st += "\t".join( [str(x) for x in line] )
+            if i != len(self.pre)-1:
+                st = st + '\n'
+        return st
+
+    def __repr__(self):
         st = ''
         for i in range(len(self.pre)):
             line = self.pre[i]
@@ -234,12 +244,15 @@ def makeMove(curr, goal):
         if heur == -1:
             heur = nextHeur
             boardList.append(temp)
+            curr.nodes += 1
         elif heur > nextHeur:
             boardList = [] # completely throw out the others
             boardList.append(temp)
+            curr.nodes += 1
             heur = nextHeur
         elif heur == nextHeur:
             boardList.append(temp)
+            curr.nodes += 1
     '''
     # well this took forever and a day
     for board in boardList:
@@ -279,15 +292,18 @@ def AStar(start, goal):
     closedList = []
     openList.append(start)
 
+    numNodes = 0
     while openList:
         current, index = best_fvalue(openList)
         if compare(current, goal):
-            return current
+            #print(numNodes)
+            return current, numNodes
         openList.pop(index)
         closedList.append(current)
 
         X = makeMove(current, goal)
         for move in X:
+            numNodes+=1
             ok = False   #checking in closedList
             for i, item in enumerate(closedList):
                 if item == move:
@@ -312,4 +328,4 @@ def AStar(start, goal):
                     move.parent = current
                     openList.append(move)
 
-    return None
+    return None, numNodes
