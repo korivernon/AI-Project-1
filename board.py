@@ -6,10 +6,15 @@ import numpy as np
 BLANK = 0
 
 class Board:
-    def __init__(self, board = []):
+    def __init__(self, board = [], parent= None, position = None):
         self.pre = board #pre refers to the board -> pre should be board. changing in the future
         self.availability = [] #list of tuples with available spaces that the space can move
         self.blank = getBlankTup(self.pre , self.availability) #get the blank tuple if possible and determine avail
+        self.parent = parent
+        self.position = position
+        self.f = 0
+        self.g = 0
+        self.h = 0
 
     def __str__(self):
         st = ''
@@ -20,6 +25,9 @@ class Board:
                 st = st + '\n'
         return st
 
+    def __eq__(self, other):
+        return self.position == other.position
+
     def getAvailability(self):
         self.blank = getBlankTup(self.pre , self.availability) #get the blank tuple if possible and determine avail
 
@@ -29,23 +37,6 @@ class Board:
 #   g is cost from start to current Node
 #   h is heuristic based estimated cost for the current Node to end Node
 #   f is total cost of present node i.e. : f(n) = g(n) + h(n)
-class Node:
-    def __init__(self, parent=None, position=None):
-        self.parent = parent
-        self.position = position
-        self.f = 0
-        self.g = 0
-        self.h = 0
-
-    def __eq__(self, other):
-        return self.position == other.position
-
-# function to reshape list instead of using numpy
-#def reshape(lst, shape):
-    #if len(shape) == 1:
-        #return lst
-    #n = reduce(mul, shape[1:])
-    #return [reshape(lst[i*n:(i+1)*n], shape[1:]) for i in range(len(lst)//n)]
 
 # return_path function will return the path of the search
 def return_path(curr_node, board):
