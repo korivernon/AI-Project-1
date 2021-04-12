@@ -309,12 +309,6 @@ def AStar(start, goal):
             ok = False   #checking in closedList
             for i, item in enumerate(closedList):
                 if item == move:
-                    '''
-                    # Need to use a dictionary so that if ok = True, then we append 
-                    the dictionary key to a list, then return that list to init.py
-                    # Need a function to compare the current node to the previous 
-                    constantly in the while t loop
-                    '''
                     ok = True
                     break
             if not ok:              #not in closed list

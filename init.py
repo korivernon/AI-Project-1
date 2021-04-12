@@ -10,6 +10,15 @@ left = 1;left_up = 2;up = 3; right_up = 4; right = 5; right_down = 6; down = 7; 
 def output(pre, post, nodes, len):
     outFile = "{}\n\n{}\n\n{}\n{}".format(pre, post, nodes, len)
     print(outFile)
+'''
+    Need to use a dictionary so that if flag = True, then we append 
+        the dictionary key to a list, then return that list to init.py
+    Need a function to compare the current node to the previous 
+        constantly in the while t loop
+'''
+def compare():
+
+
 def main():
     # initialize test board
     # testBoard = Board("test.txt")
