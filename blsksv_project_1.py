@@ -21,7 +21,7 @@ class Board:
             print(self.blank)
         else:
             self.position = position #saving the last position
-            self.moveTile()
+            self.move()
             self.parent = copy.deepcopy(self.pre) #preserve the parent board
             self.g = board.g + 1
             self.h = self.manhattan()
@@ -54,9 +54,6 @@ class Board:
             if tile.val == 0:
                 return tile
 
-    def getAvailability(self):
-        self.blank = getBlankTup(self.pre , self.availability) #get the blank tuple if possible and determine avail
-
     def flatten(self):
         flatten = []  # flatten the list to easily parse
         for line in self.pre:
@@ -77,6 +74,14 @@ class Board:
                     goalTile = tile
             total += abs(currTile.x - goalTile.x) + abs(currTile.y - goalTile.y) #how to alter for diag..?
         return total
+
+    def move(self):
+        self.blank, self.availability = getBlankTup(self.pre)  # get the blank dict if possible and determine avail
+        after = self.availability[self.position] # tuple that has the location we want to swap with
+        swap_placement(self.blank, after)
+
+    def swap_placement(self, before, after):
+        self.pre[before[0]][before[1]], self.pre[after[0]][after[1]] = self.pre[after[0]][after[1]], self.pre[before[0]][before[1]]
 
 class Tile:
     def __init__(self, x, y, curr, goal = None):
@@ -108,37 +113,19 @@ def stats(curr, goal):
     print("\t->h(x) = {}".format(compareBoard(curr, goal)))
     print("=======End of Statistics======")
 
-def makeMove(curr, goal):
-    '''
-    make a move based on the current state of the board
-    and then return a list of the boards with the best
-    heuristic.
-    :param curr: current Board
-    :param goal: goal Board
-    :return: [ <Board> ]
-    '''
-    heur = -1
-    boardList = []
-    for tup in curr.availability:
-        base = copy.deepcopy(curr.pre) # create a copy
-        temp = swap(base, curr.blank, tup)
-        nextHeur = compareBoard(temp, goal)
-        if heur == -1:
-            heur = nextHeur
-            boardList.append(temp)
-            curr.nodes += 1
-        elif heur > nextHeur:
-            boardList = [] # completely throw out the others
-            boardList.append(temp)
-            curr.nodes += 1
-            heur = nextHeur
-        elif heur == nextHeur:
-            boardList.append(temp)
-            curr.nodes += 1
-    return boardList
-
-
 def swap(cond, before, after):
+    '''
+    swaps the position when passed a conditon, the before tuple, and the after tuple
+    :param cond: list
+    :param before: tuple containing before coordinates
+    :param after: tuple containing after coordinates
+    :return: <Board>
+    '''
+    cond[before[0]][before[1]], cond[after[0]][after[1]] = cond[after[0]][after[1]], cond[before[0]][before[1]]
+    temp = Board(cond)
+    return temp
+
+def swap_placement(cond, before, after):
     '''
     swaps the position when passed a conditon, the before tuple, and the after tuple
     :param cond: list
@@ -238,11 +225,26 @@ def search(start):
             elif board.f == currBoard.f and board.h < currBoard.h: # if the same f(n) is present, but h is deeper, swap priority
                 currBoard = board
             openList.remove(currBoard) #remove the board from the openList
-
             if currBoard.h == 0:
-                return [currBoard, numNodes]
-            blank = currBoard.emptyTile() #find the blank tile in the board
+                return currBoard, numNodes
+            for key in currBoard.availability.keys():
+                newBoard = Board(newBoard, key)         #creates new node
+                openList.append(newBoard)
+                numNodes += 1
+     return None
 
+def findBestf(board):
+    f_lst = []
+    positions = []
+    curr = board
+    while curr.parent != None:
+        f_lst.append(curr.f)
+        positions.append(curr.positions)
+        curr = curr.parent # go back by one node and traverse
+
+    f_lst.append(curr.f); f_lst.reverse()
+    positions.reverse()
+    return f_lst, positions
 
 def parseLine(line):
     '''
@@ -261,6 +263,14 @@ def parseLine(line):
         except ValueError:
             line[i] = line[i]
     return line
+
+def init_board_with_file_and_run(filename):
+    start = readAndLoadFromFile(filename)
+    goal, numNodes = search(start) # starts the search
+    f_lst, positions = findBestf(goal)
+
+def output(board):
+    pass
 
 def main():
     pre = readAndLoadFromFile(SO)
