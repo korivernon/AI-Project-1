@@ -96,9 +96,8 @@ def readFromFile(filename):
     return pre, post #return tuple
 
 def readAndLoadFromFile(filename):
-    pre = []
+    pre = []; goal = []
     inFile = open(filename, "r")
-    yy = 0 # this is for the second condition
     for y, line in enumerate(inFile):
         elems = []
         line = line.strip().split()
@@ -108,7 +107,12 @@ def readAndLoadFromFile(filename):
             for x, item in enumerate(line):
                 curr = Tile(x,y, item)
                 elems.append(curr)
-        pre.append(elems)
+            pre.append(elems)
+        elif y > 4:
+            goal.append(line)
+    for y, line in enumerate(pre):
+        for x, tile in enumerate(line):
+            tile.addGoal(goal[y][x])
     inFile.close()
     pre = Board(pre)
     return pre
