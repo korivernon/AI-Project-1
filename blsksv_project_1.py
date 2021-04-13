@@ -9,16 +9,21 @@ LOWER = 0
 UPPER = 3
 
 class Board:
-    def __init__(self, board = [], parent= None, position = None):
-        self.pre = board #pre refers to the board -> pre should be board. changing in the future
-        self.availability = [] #list of tuples with available spaces that the space can move
-        self.blank = getBlankTup(self.pre , self.availability) #get the blank tuple if possible and determine avail
-        self.parent = parent
-        self.position = position
-        self.nodes = 0
-        self.f = 0
-        self.g = 0
-        self.h = 0
+    def __init__(self, board, position=None):
+        if (isinstance(board, list)): #determine whether this is the first instance. if it is, then we
+            self.pre = board
+            self.parent = None
+            self.position = None
+            self.g = 0
+            self.h = self.manhattan()
+            self.f = self.h + self.g
+        else:
+            self.position = position #saving the last position
+            self.moveTile()
+            self.parent = copy.deepcopy(self.pre) #preserve the parent board
+            self.g = board.g + 1
+            self.h = self.manhattan()
+            self.f = self.g + self.h
 
     def __str__(self):                              #this is for string representation.
         st = ''

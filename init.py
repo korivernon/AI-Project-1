@@ -5,6 +5,25 @@ INP2 = "inp/Input2.txt"
 INP3 = "inp/Input3.txt"
 SO = "inp/Sample_Output.txt"
 
+def __init__(self, board, direction = None):
+    if (isinstance(board, list)):
+        self.pre = board
+        self.parent = None
+        self.lastMove = None
+        self.g = 0
+        self.h = self.manhattan()
+        self.f = self.h + self.g
+    else:
+        self.pre = []
+        for tile in self.pre:
+            self.pre.append(Tile(tile.x, tile.y, tile.val, tile.goal))
+        self.lastMove = lastMove
+        self.moveTile()
+        self.parent = board
+        self.g = board.g + 1
+        self.h = self.manhattan()
+        self.f = self.g + self.h
+
 left = 1;left_up = 2;up = 3; right_up = 4; right = 5; right_down = 6; down = 7; left_down = 8
 
 '''
