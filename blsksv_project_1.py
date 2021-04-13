@@ -2,11 +2,11 @@ from function import *
 import copy
 import numpy as np
 import math
+SO = "inp/Sample_Output.txt"
 
 BLANK = 0
 LOWER = 0
 UPPER = 3
-BLANK = 0
 
 class Board:
     def __init__(self, board = [], parent= None, position = None):
@@ -20,7 +20,7 @@ class Board:
         self.g = 0
         self.h = 0
 
-    def __str__(self):
+    def __str__(self):                              #this is for string representation.
         st = ''
         for i in range(len(self.pre)):
             line = self.pre[i]
@@ -44,24 +44,21 @@ class Board:
     def getAvailability(self):
         self.blank = getBlankTup(self.pre , self.availability) #get the blank tuple if possible and determine avail
 
-    def manhattan(self):
-        h = 0
-        for i in range(len(self.pre)):
-            for j in range(len(self.pre)):
-                x, y = divmod(self.pre[i][j], 3)
-                #print(x, y, len(self.pre))
-                h += abs(x-i) + abs(y-j)
-                h += abs(x-i) + abs(y-j)
-        return h
+class Tile:
+    def __init__(self, x, y, curr, goal = None):
+        self.x = x
+        self.y = y
+        self.val = curr
+        self.goal = goal
 
-def calculateManhattan(curr, goal):
-    initial_config = curr.pre
-    manDict = 0
-    for i,item in enumerate(initial_config):
-        prev_row,prev_col = int(i/ 4) , i % 4
-        goal_row,goal_col = int(item /4),item % 4
-        manDict += abs(prev_row-goal_row) + abs(prev_col - goal_col)
-    return manDict
+    def addGoal(self, goal): #if we need to add a goal, we have an option to do so
+        self.goal = goal
+        return True
+
+    def __str__(self):
+        st = "x: {}, y: {}, val: {}, goal: {}".format(self.x, self.y, self.val, self.goal)
+        return st
+
 '''
 Used for A* Implementation
    parent represents the parent of the current node
@@ -93,25 +90,27 @@ def readFromFile(filename):
         elif count > 5:
             post.append(line)
             postBoard += line
-    try:
+    # check if boards are valid
+    pre = Board(pre); post = Board(post) # create board objects
+    inFile.close()
+    return pre, post #return tuple
 
-        preBoard.pop(preBoard.index(BLANK)); postBoard.pop(postBoard.index(BLANK)) # try popping the blank space
-        preBoard.sort(); postBoard.sort() # sort the lists then compare
-        if not (preBoard == postBoard):
-            inFile.close()
-            return False
-    except TypeError:
-        pass
-    try:
-        lenBoard = len(postBoard)
-    except IndexError:
-        if lenBoard > 15:
-            lenBoard = 'null'
-    finally:
-        # check if boards are valid
-        pre = Board(pre); post = Board(post) # create board objects
-        inFile.close()
-        return pre, post #return tuple
+def readAndLoadFromFile(filename):
+    pre = []
+    inFile = open(filename, "r")
+    yy = 0 # this is for the second condition
+    for y, line in enumerate(inFile):
+        elems = []
+        line = line.strip().split()
+        line = parseLine(line)
+
+        if y < 4:
+            for x, item in enumerate(line):
+                curr = Tile(x,y, item)
+                elems.append(curr)
+        pre.append(elems)
+    inFile.close()
+    return pre
 
 def stats(curr, goal):
     '''
@@ -354,19 +353,9 @@ def parseLine(line):
             line[i] = line[i]
     return line
 
-def printPretty(cond):
-    '''
-    Print 2D array prettily
-    :param cond pre or post condition
-    '''
-    try:
-        if cond != []:
-            for i in range(len(cond)):
-                try:
-                    for j in range(len(cond[i])):
-                        print(str(cond[i][j]) + "\t", end="", sep="\t")
-                    print()
-                except TypeError:
-                    return
-    except AttributeError:
-        return
+def main():
+    pre = readAndLoadFromFile(SO)
+    for y in pre:
+        for x in y:
+            print(x.x, x.y)
+main()
