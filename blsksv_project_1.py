@@ -85,33 +85,6 @@ Used for A* Implementation
    h is heuristic based estimated cost for the current node to end node
    f is total cost of present node i.e. : f(n) = g(n) + h(n)
 '''
-def readFromFile(filename):
-    '''
-    readFromFile is passed a filename in the format
-    that we expect. Everything from the file
-    will be stored in a two dimensional array.
-    :return: ( <Board> , <Board> )
-    '''
-    preBoard, postBoard = [], []
-    inFile = open(filename, "r")
-    count = 0
-    pre = [] ; post = []
-    for line in inFile:
-        count += 1
-        line = line.strip().split() ; line = parseLine(line) # split by space and convert from string to integer
-        if not checkLine(line):
-            print("\n\t\tRow: {}".format(count))
-            print("\tFilename with error present: {}\n".format(filename))
-        if count < 5:
-            pre.append(line)
-            preBoard += line
-        elif count > 5:
-            post.append(line)
-            postBoard += line
-    # check if boards are valid
-    pre = Board(pre); post = Board(post) # create board objects
-    inFile.close()
-    return pre, post #return tuple
 
 def readAndLoadFromFile(filename):
     pre = []; goal = []
