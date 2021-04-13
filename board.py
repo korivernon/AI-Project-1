@@ -49,16 +49,6 @@ class Board:
                 h += abs(x-i) + abs(y-j)
                 h += abs(x-i) + abs(y-j)
         return h
-'''
-def manhattan_sum(curr, goal):
-    h = 0
-    for i in range(len(curr.pre)):
-        for j in range(len(curr.pre)):
-
-            h += abs(curr.pre[i][j]) + abs(goal.pre[i][j])
-    h = math.sqrt(h)
-    return h
-'''
 
 def calculateManhattan(curr, goal):
     initial_config = curr.pre
