@@ -17,6 +17,8 @@ class Board:
             self.g = 0
             self.h = self.manhattan()
             self.f = self.h + self.g
+            self.blank,self.availability = getBlankTup(self.pre)  # get the blank dict if possible and determine avail
+            print(self.blank)
         else:
             self.position = position #saving the last position
             self.moveTile()
@@ -24,6 +26,7 @@ class Board:
             self.g = board.g + 1
             self.h = self.manhattan()
             self.f = self.g + self.h
+            self.blank,self.availability = getBlankTup(self.pre)  # get the blank dict if possible and determine avail
 
     def __str__(self):                              #this is for string representation.
         st = ''
@@ -49,7 +52,7 @@ class Board:
     def getBlank(self):
         for tile in self.pre:
             if tile.val == 0:
-                return tile.val
+                return tile
 
     def getAvailability(self):
         self.blank = getBlankTup(self.pre , self.availability) #get the blank tuple if possible and determine avail
@@ -87,38 +90,8 @@ class Tile:
         return True
 
     def __str__(self):
-        st = "x: {}, y: {}, val: {}, goal: {}".format(self.x, self.y, self.val, self.goal)
+        st = "x: {}, y: {}, val: {}, goal: {}\t\t|".format(self.x, self.y, self.val, self.goal)
         return st
-
-'''
-Used for A* Implementation
-   parent represents the parent of the current node
-   position represents the current position of the node on the board
-   g is cost from start to current node
-   h is heuristic based estimated cost for the current node to end node
-   f is total cost of present node i.e. : f(n) = g(n) + h(n)
-'''
-
-def readAndLoadFromFile(filename):
-    pre = []; goal = []
-    inFile = open(filename, "r")
-    for y, line in enumerate(inFile):
-        elems = []
-        line = line.strip().split()
-        line = parseLine(line)
-        if y < 4:
-            for x, item in enumerate(line):
-                curr = Tile(x,y, item)
-                elems.append(curr)
-            pre.append(elems)
-        elif y > 4:
-            goal.append(line)
-    for y, line in enumerate(pre):
-        for x, tile in enumerate(line):
-            tile.addGoal(goal[y][x])
-    inFile.close()
-    pre = Board(pre)
-    return pre
 
 def stats(curr, goal):
     '''
@@ -180,28 +153,24 @@ def swap(cond, before, after):
 def compare(curr, goal):
     return curr.pre == goal.pre
 
-def getBlankTup(cond, avail = None):
+def getBlankTup(cond ):
     '''
     get the precondition or post condition tuple when passed the
     :param cond: precondition tuple
     :return: tuple with the coordinates of the blank space
     '''
+    avail = {}
     for i in range(len(cond)):
         for j in range(len(cond[i])):
-            if cond[i][j] == BLANK:
+            if cond[i][j].val == BLANK:
                 if (avail != None):
                     #check all sides
-                    avail = checkAvail( (i,j) , avail)
-                return (i, j)
-    return (-1,-1)
+                    avail = checkAvail( (i,j) )
+                return (i, j), avail
+    return (-1,-1) , {}
 
-def checkAvail(loc, retLst ):
-    '''
-    :param loc: this is the location that we are checking
-    :param cond: this is the condition, either pre or post
-    :param lst: this is the return list
-    :return: None
-    '''
+def checkAvail(loc ):
+    retLst = []
     retDict = {}
 
     #check upZ
@@ -256,7 +225,23 @@ def checkAvail(loc, retLst ):
             (loc[0] + 1, loc[1] + 1)
         )
         retDict[6] = retLst[-1]
-    return retLst
+    return retDict
+
+def search(start):
+    numNodes = 1 #initial number of nodes created starts with root node
+    openList = [start] #initializes an open list with the initial board
+    while (len(openList) > 0):
+        currBoard = openList[0] #assigning a default board
+        for board in openList:
+            if board.f < currBoard.f:
+                currBoard = board # if the f(n) value is more favorable, replace it
+            elif board.f == currBoard.f and board.h < currBoard.h: # if the same f(n) is present, but h is deeper, swap priority
+                currBoard = board
+            openList.remove(currBoard) #remove the board from the openList
+
+            if currBoard.h == 0:
+                return [currBoard, numNodes]
+            blank = currBoard.emptyTile() #find the blank tile in the board
 
 
 def parseLine(line):
@@ -280,4 +265,5 @@ def parseLine(line):
 def main():
     pre = readAndLoadFromFile(SO)
     print(pre)
+    print(pre.availability)
 main()
