@@ -110,6 +110,7 @@ def readAndLoadFromFile(filename):
                 elems.append(curr)
         pre.append(elems)
     inFile.close()
+    pre = Board(pre)
     return pre
 
 def stats(curr, goal):
@@ -354,8 +355,8 @@ def parseLine(line):
     return line
 
 def main():
+    pre = readFromFile(SO)
+    print(pre)
     pre = readAndLoadFromFile(SO)
-    for y in pre:
-        for x in y:
-            print(x.x, x.y)
+    print(pre)
 main()
