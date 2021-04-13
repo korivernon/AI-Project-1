@@ -44,6 +44,19 @@ class Board:
     def getAvailability(self):
         self.blank = getBlankTup(self.pre , self.availability) #get the blank tuple if possible and determine avail
 
+    def manhattan(self):
+        total = 0
+        currTile = None
+        goalTile = None
+        for i in range(1, 15):
+            for tile in self.pre:
+                if (tile.val == i):
+                    currTile = tile
+                if (tile.goal == i):
+                    goalTile = tile
+                total += abs(currTile.x - goalTile.x) + abs(currTile.y - goalTile.y)
+        return total
+
 class Tile:
     def __init__(self, x, y, curr, goal = None):
         self.x = x
@@ -102,7 +115,6 @@ def readAndLoadFromFile(filename):
         elems = []
         line = line.strip().split()
         line = parseLine(line)
-
         if y < 4:
             for x, item in enumerate(line):
                 curr = Tile(x,y, item)
