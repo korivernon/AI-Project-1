@@ -46,20 +46,33 @@ class Board:
     def __eq__(self, other):
         return self.pre == other.pre
 
+    def getBlank(self):
+        for tile in self.pre:
+            if tile.val == 0:
+                return tile.val
+
     def getAvailability(self):
         self.blank = getBlankTup(self.pre , self.availability) #get the blank tuple if possible and determine avail
+
+    def flatten(self):
+        flatten = []  # flatten the list to easily parse
+        for line in self.pre:
+            flatten.extend(line)
+
+        return flatten
 
     def manhattan(self):
         total = 0
         currTile = None
         goalTile = None
-        for i in range(1, 16):
-            for tile in self.pre:
+        flat = self.flatten()
+        for i in range(len(flat)):
+            for tile in flat:
                 if (tile.val == i):
                     currTile = tile
                 if (tile.goal == i):
                     goalTile = tile
-                total += abs(currTile.x - goalTile.x) + abs(currTile.y - goalTile.y) #how to alter for diag..?
+            total += abs(currTile.x - goalTile.x) + abs(currTile.y - goalTile.y) #how to alter for diag..?
         return total
 
 class Tile:
@@ -151,17 +164,6 @@ def makeMove(curr, goal):
             curr.nodes += 1
     return boardList
 
-def best_fvalue(openList):
-    f = openList[0].f
-    index = 0
-    for i, item in enumerate(openList):
-        if i == 0:
-            continue
-        if(item.f < f):
-            f = item.f
-            index  = i
-
-    return openList[index], index
 
 def swap(cond, before, after):
     '''
@@ -177,68 +179,6 @@ def swap(cond, before, after):
 
 def compare(curr, goal):
     return curr.pre == goal.pre
-
-def AStar(start, goal):
-    openList = []
-    closedList = []
-    print("start\n" + str(start))
-    #print(type(start))
-    openList.append(start)
-
-    numNodes = 0
-    while openList:
-        print(openList[0])
-        current, index = best_fvalue(openList)
-        if compare(current, goal):
-            #print(numNodes)
-            return current, numNodes
-        openList.pop(index)
-        closedList.append(current)
-
-        X = makeMove(current, goal)
-        for move in X:
-            numNodes+=1
-            ok = False   #checking in closedList
-            for i, item in enumerate(closedList):
-                if item == move:
-                    ok = True
-                    break
-            if not ok:              #not in closed list
-                newG = current.g + 1
-                present = False
-
-                #openList includes move
-                for j, item in enumerate(openList):
-                    if item == move:
-                        present = True
-                        if newG < openList[j].g:
-                            openList[j].g = newG
-                            openList[j].f = openList[j].g + openList[j].h
-                            openList[j].parent = current
-                if not present:
-                    move.g = newG
-                    move.h = move.manhattan()
-                    #print(move.h)
-                    move.f = move.g + move.h
-                    move.parent = current
-                    openList.append(move)
-
-    return None, numNodes
-
-def compareBoard(curr, post):
-    '''
-    get the heuristic of the current board when compared to the
-    board at the end
-    :param curr: pre condition/current board
-    :param post: post condition/goal board
-    :return: int
-    '''
-    count = 0
-    for i in range(len(curr.pre)):
-        for j in range(len(curr.pre[i])):
-            if curr.pre[i][j] != post.pre[i][j]:
-                count +=1
-    return count
 
 def getBlankTup(cond, avail = None):
     '''
@@ -318,17 +258,6 @@ def checkAvail(loc, retLst ):
         retDict[6] = retLst[-1]
     return retLst
 
-def checkLine(line):
-    retBool = True
-    for i in range(len(line)):
-        num = line[i]
-        try:
-            if not (num <= 15 and num >= 0):
-                print("readFromFile() Error:\n\tIncorrect value(s) given on:\n\t\tColumn: {}".format(i+1), end="")
-                retBool = False
-        except TypeError:
-            continue
-    return retBool
 
 def parseLine(line):
     '''
@@ -349,8 +278,6 @@ def parseLine(line):
     return line
 
 def main():
-    pre = readFromFile(SO)
-    print(pre)
     pre = readAndLoadFromFile(SO)
     print(pre)
 main()
