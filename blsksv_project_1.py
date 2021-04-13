@@ -59,7 +59,7 @@ class Board:
                     currTile = tile
                 if (tile.goal == i):
                     goalTile = tile
-                total += abs(currTile.x - goalTile.x) + abs(currTile.y - goalTile.y)
+                total += abs(currTile.x - goalTile.x) + abs(currTile.y - goalTile.y) #how to alter for diag..?
         return total
 
 class Tile:
