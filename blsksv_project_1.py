@@ -48,7 +48,7 @@ class Board:
         total = 0
         currTile = None
         goalTile = None
-        for i in range(1, 15):
+        for i in range(1, 16):
             for tile in self.pre:
                 if (tile.val == i):
                     currTile = tile
