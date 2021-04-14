@@ -228,24 +228,24 @@ def makeMove(curr, goal):
     '''
 
     blankTile = curr.getBlank()
-    goal_x_tile = blankTile.x
-    goal_y_tile = blankTile.y
+    goal_x_tile = goal.x
+    goal_y_tile = goal.y
 
-    if (curr.direction == "L"):
+    if (curr.position == "L"):
         goal_x_tile = goal_x_tile - 1
-    elif (curr.direction == "R"):
+    elif (curr.posiiton == "R"):
         goal_x_tile = goal_x_tile + 1
-    elif (curr.direction == "U"):
+    elif (curr.position == "U"):
         goal_y_tile = goal_y_tile - 1
-    elif (curr.direction == "D"):
+    elif (curr.position == "D"):
         goal_y_tile = goal_y_tile + 1
-    elif (curr.direction == "LU"):
+    elif (curr.position == "LU"):
         goal_x_tile = goal_x_tile - 1
         goal_y_tile = goal_y_tile + 1
-    elif (curr.direction == "RU"):
+    elif (curr.position == "RU"):
         goal_x_tile = goal_x_tile + 1
         goal_y_tile = goal_y_tile + 1
-    elif (curr.direction == "LD"):
+    elif (curr.position == "LD"):
         goal_x_tile = goal_x_tile - 1
         goal_y_tile = goal_y_tile - 1
     elif (curr.direction == "RD"):
