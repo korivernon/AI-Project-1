@@ -2,7 +2,6 @@ from function import *
 import copy
 import numpy as np
 import math
-SO = "inp/Sample_Output.txt"
 import sys
 
 BLANK = 0
@@ -11,16 +10,18 @@ UPPER = 3
 
 class Board:
     def __init__(self, board, position=None):
-        if (isinstance(board, list)): #determine whether this is the first instance. if it is, then we
+        if position == None: #determine whether this is the first instance. if it is, then we
+
             self.pre = board
+            print(self.pre)
             self.parent = None
             self.position = None
             self.g = 0
             self.h = self.manhattan()
             self.f = self.h + self.g
             self.blank,self.availability = getBlankTup(self.pre)  # get the blank dict if possible and determine avail
-            print(self.blank)
         else:
+            self.pre = board.pre
             self.position = position #saving the last position
             self.move()
             self.parent = copy.deepcopy(self.pre) #preserve the parent board
@@ -46,9 +47,6 @@ class Board:
             if i != len(self.pre)-1:
                 st = st + '\n'
         return st
-
-    def __eq__(self, other):
-        return self.pre == other.pre
 
     def getBlank(self):
         for tile in self.pre:
@@ -79,7 +77,8 @@ class Board:
     def move(self):
         self.blank, self.availability = getBlankTup(self.pre)  # get the blank dict if possible and determine avail
         after = self.availability[self.position] # tuple that has the location we want to swap with
-        swap_placement(self.blank, after)
+        print(self.position)
+        self.swap_placement(self.blank, after)
 
     def swap_placement(self, before, after):
         self.pre[before[0]][before[1]], self.pre[after[0]][after[1]] = self.pre[after[0]][after[1]], self.pre[before[0]][before[1]]
@@ -104,7 +103,7 @@ def readAndLoadFromFile(filename):
     try:
         inFile = open(filename, "r")
     except FileNotFoundError:
-        return
+        return False
     for y, line in enumerate(inFile):
         elems = []
         line = line.strip().split()
@@ -123,66 +122,25 @@ def readAndLoadFromFile(filename):
     pre = Board(pre)
     return pre
 
-def stats(curr, goal):
-    '''
-    ouput the statistics of the current board with the goal board
-    :param curr: current Board
-    :param goal: goal Board
-    :return:
-    '''
-    print("==========Statistics==========")
-    print("\t->Blank Location: {}".format(curr.blank))
-    print("\t->Availability:")
-    for i in range(len(curr.availability)):
-        print("\t\t\t{}".format(curr.availability[i]))
-    print("\t->h(x) = {}".format(compareBoard(curr, goal)))
-    print("=======End of Statistics======")
-
-def swap(cond, before, after):
-    '''
-    swaps the position when passed a conditon, the before tuple, and the after tuple
-    :param cond: list
-    :param before: tuple containing before coordinates
-    :param after: tuple containing after coordinates
-    :return: <Board>
-    '''
-    cond[before[0]][before[1]], cond[after[0]][after[1]] = cond[after[0]][after[1]], cond[before[0]][before[1]]
-    temp = Board(cond)
-    return temp
-
 def swap_placement(cond, before, after):
-    '''
-    swaps the position when passed a conditon, the before tuple, and the after tuple
-    :param cond: list
-    :param before: tuple containing before coordinates
-    :param after: tuple containing after coordinates
-    :return: <Board>
-    '''
     cond[before[0]][before[1]], cond[after[0]][after[1]] = cond[after[0]][after[1]], cond[before[0]][before[1]]
     temp = Board(cond)
     return temp
 
-def getBlankTup(cond ):
-    '''
-    get the precondition or post condition tuple when passed the
-    :param cond: precondition tuple
-    :return: tuple with the coordinates of the blank space
-    '''
+def getBlankTup(cond):
     avail = {}
     for i in range(len(cond)):
         for j in range(len(cond[i])):
             if cond[i][j].val == BLANK:
                 if (avail != None):
-                    #check all sides
-                    avail = checkAvail( (i,j) )
+                    # check all sides
+                    avail = checkAvail((i, j))
                 return (i, j), avail
-    return (-1,-1) , {}
+    return (-1, -1), {}
 
 def checkAvail(loc ):
     retLst = []
     retDict = {}
-
-    #check upZ
     up = loc[0] > LOWER
     down = loc[0] < UPPER
     left = loc[1] > LOWER
@@ -240,6 +198,7 @@ def search(start):
     numNodes = 1 #initial number of nodes created starts with root node
     openList = [start] #initializes an open list with the initial board
     while len(openList) > 0:
+
         currBoard = openList[0] #assigning a default board
         for board in openList:
             if board.f < currBoard.f:
@@ -249,7 +208,8 @@ def search(start):
             openList.remove(currBoard) #remove the board from the openList
             if currBoard.h == 0:
                 return currBoard, numNodes
-            for key, value in currBoard.items():
+            print(type(currBoard))
+            for key, value in currBoard.availability.items():
                 newBoard = Board(currBoard, key)         #creates new node
                 openList.append(newBoard)
                 numNodes += 1
@@ -263,7 +223,6 @@ def findBestf(board):
         f_lst.append(curr.f)
         positions.append(curr.positions)
         curr = curr.parent # go back by one node and traverse
-
     f_lst.append(curr.f); f_lst.reverse()
     positions.reverse()
     return f_lst, positions
@@ -288,6 +247,8 @@ def parseLine(line):
 
 def init_board_with_file_and_run(filename):
     start = readAndLoadFromFile(filename)
+    if start == False:
+        return False
     goal, numNodes = search(start) # starts the search
     f_lst, positions = findBestf(goal)
     st = output(board, board.g, numNodes, positions, f_lst)
@@ -322,12 +283,15 @@ def valid_filename(filename):
     return True
 
 def main():
-
+    init_board_with_file_and_run("inp/Input1.txt")
+    pass
     while 1:
         filename = input("Please enter the filename you would like to perform the A Star Search on (q to quit): ")
         while not valid_filename(filename):
             filename = input("Please enter the filename you would like to perform the A Star Search on (q to quit): ")
         if filename == "q":
             break
-        init_board_with_file_and_run(filename)
+        if not init_board_with_file_and_run(filename):
+            print("Invalid input given.")
+            print()
 main()
