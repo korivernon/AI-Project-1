@@ -99,6 +99,30 @@ class Tile:
         st = "x: {}, y: {}, val: {}, goal: {}\t\t|".format(self.x, self.y, self.val, self.goal)
         return st
 
+def readAndLoadFromFile(filename):
+    pre = []; goal = []
+    try:
+        inFile = open(filename, "r")
+    except FileNotFoundError:
+        return
+    for y, line in enumerate(inFile):
+        elems = []
+        line = line.strip().split()
+        line = parseLine(line)
+        if y < 4:
+            for x, item in enumerate(line):
+                curr = Tile(x,y, item)
+                elems.append(curr)
+            pre.append(elems)
+        elif y > 4:
+            goal.append(line)
+    for y, line in enumerate(pre):
+        for x, tile in enumerate(line):
+            tile.addGoal(goal[y][x])
+    inFile.close()
+    pre = Board(pre)
+    return pre
+
 def stats(curr, goal):
     '''
     ouput the statistics of the current board with the goal board
@@ -137,9 +161,6 @@ def swap_placement(cond, before, after):
     cond[before[0]][before[1]], cond[after[0]][after[1]] = cond[after[0]][after[1]], cond[before[0]][before[1]]
     temp = Board(cond)
     return temp
-
-def compare(curr, goal):
-    return curr.pre == goal.pre
 
 def getBlankTup(cond ):
     '''
