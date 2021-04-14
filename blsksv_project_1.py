@@ -7,7 +7,7 @@ import sys
 BLANK = 0
 LOWER = 0
 UPPER = 3
-
+# hi my name is bethany heheheheheheheheehhee
 class Board:
     def __init__(self, board, position=None):
         if position == None: #determine whether this is the first instance. if it is, then we
