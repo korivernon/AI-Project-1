@@ -199,17 +199,16 @@ def search(start):
     numNodes = 1 #initial number of nodes created starts with root node
     openList = [start] #initializes an open list with the initial board
     while len(openList) > 0:
-        currInd = 0
         currBoard = openList[0] #assigning a default board
         for i, board in enumerate(openList):
             if board.f < currBoard.f:
                 currBoard = board # if the f(n) value is more favorable, replace it
-                currInd = i
             elif board.f == currBoard.f and board.h < currBoard.h: # if the same f(n) is present, but h is deeper, swap priority
                 currBoard = board
-                currInd = i
-            openList.pop(currInd)
-            print(currInd)
+            for b in openList: #remove the board from the list
+                if b.pre == currBoard.pre:
+                    openList.remove(b)
+                    break
             if currBoard.h == 0:
                 return currBoard, numNodes
             for key, value in currBoard.availability.items():
