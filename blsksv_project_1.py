@@ -3,6 +3,7 @@ import copy
 import numpy as np
 import math
 SO = "inp/Sample_Output.txt"
+import sys
 
 BLANK = 0
 LOWER = 0
@@ -217,7 +218,7 @@ def checkAvail(loc ):
 def search(start):
     numNodes = 1 #initial number of nodes created starts with root node
     openList = [start] #initializes an open list with the initial board
-    while (len(openList) > 0):
+    while len(openList) > 0:
         currBoard = openList[0] #assigning a default board
         for board in openList:
             if board.f < currBoard.f:
@@ -227,11 +228,11 @@ def search(start):
             openList.remove(currBoard) #remove the board from the openList
             if currBoard.h == 0:
                 return currBoard, numNodes
-            for key in currBoard.availability.keys():
-                newBoard = Board(newBoard, key)         #creates new node
+            for key, value in currBoard.items():
+                newBoard = Board(currBoard, key)         #creates new node
                 openList.append(newBoard)
                 numNodes += 1
-     return None
+    return None, None
 
 def findBestf(board):
     f_lst = []
@@ -268,12 +269,44 @@ def init_board_with_file_and_run(filename):
     start = readAndLoadFromFile(filename)
     goal, numNodes = search(start) # starts the search
     f_lst, positions = findBestf(goal)
+    st = output(board, board.g, numNodes, positions, f_lst)
 
-def output(board):
-    pass
+    newFilename = filename[:filename.find(".")] + "_ASTAR_OUTPUT.txt"
+    print(st, newFilename)
+
+    return True
+
+def output(board, shallowest_node, numNodes, directions, f_lst):
+    st = ""
+    # output the starting board
+    for y, line in enumerate(board):
+        line = board[y]
+        st += "\t".join([str(x.val) for x in line])
+        if i != len(self.pre)-1:
+            st = st + '\n'
+    st += '\n' #output the new line character
+    for y, line in enumerate(board):
+        line = board[y]
+        st += "\t".join([str(x.goal) for x in line])
+        if i != len(self.pre)-1:
+            st = st + '\n'
+    ending = "{}\n{}\n{}\n{}".format(shallowest_node, numNodes, " ".join(directions), " ".join(f_lst))
+    st += ending
+    return st
+
+def valid_filename(filename):
+    cond = filename[-4:-1] == ".txt" or filename == "q"
+    if cond:
+        return True
+    return True
 
 def main():
-    pre = readAndLoadFromFile(SO)
-    print(pre)
-    print(pre.availability)
+
+    while 1:
+        filename = input("Please enter the filename you would like to perform the A Star Search on (q to quit): ")
+        while not valid_filename(filename):
+            filename = input("Please enter the filename you would like to perform the A Star Search on (q to quit): ")
+        if filename == "q":
+            break
+        init_board_with_file_and_run(filename)
 main()
