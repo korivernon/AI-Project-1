@@ -82,7 +82,7 @@ class Board:
         self.swap_placement(self.blank, after)
 
     def swap_placement(self, before, after):
-        self.pre[before[0]][before[1]], self.pre[after[0]][after[1]] = self.pre[after[0]][after[1]], self.pre[before[0]][before[1]]
+        self.pre[before[0]][before[1]].val, self.pre[after[0]][after[1]].val = self.pre[after[0]][after[1]].val, self.pre[before[0]][before[1]].val
 
 class Tile:
     def __init__(self, x, y, curr, goal = None):
@@ -208,7 +208,8 @@ def search(start):
             elif board.f == currBoard.f and board.h < currBoard.h: # if the same f(n) is present, but h is deeper, swap priority
                 currBoard = board
                 currInd = i
-            openList.pop(currInd) #remove the board from the openList
+            openList.pop(currInd)
+            print(currInd)
             if currBoard.h == 0:
                 return currBoard, numNodes
             for key, value in currBoard.availability.items():
