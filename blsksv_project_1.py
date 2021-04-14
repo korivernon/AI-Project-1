@@ -13,7 +13,6 @@ class Board:
         if position == None: #determine whether this is the first instance. if it is, then we
 
             self.pre = board
-            print(self.pre)
             self.parent = None
             self.position = None
             self.g = 0
@@ -76,8 +75,10 @@ class Board:
 
     def move(self):
         self.blank, self.availability = getBlankTup(self.pre)  # get the blank dict if possible and determine avail
-        after = self.availability[self.position] # tuple that has the location we want to swap with
-        print(self.position)
+        try:
+            after = self.availability[self.position] # tuple that has the location we want to swap with
+        except KeyError:
+            return
         self.swap_placement(self.blank, after)
 
     def swap_placement(self, before, after):
@@ -198,17 +199,18 @@ def search(start):
     numNodes = 1 #initial number of nodes created starts with root node
     openList = [start] #initializes an open list with the initial board
     while len(openList) > 0:
-
+        currInd = 0
         currBoard = openList[0] #assigning a default board
-        for board in openList:
+        for i, board in enumerate(openList):
             if board.f < currBoard.f:
                 currBoard = board # if the f(n) value is more favorable, replace it
+                currInd = i
             elif board.f == currBoard.f and board.h < currBoard.h: # if the same f(n) is present, but h is deeper, swap priority
                 currBoard = board
-            openList.remove(currBoard) #remove the board from the openList
+                currInd = i
+            openList.pop(currInd) #remove the board from the openList
             if currBoard.h == 0:
                 return currBoard, numNodes
-            print(type(currBoard))
             for key, value in currBoard.availability.items():
                 newBoard = Board(currBoard, key)         #creates new node
                 openList.append(newBoard)
