@@ -215,6 +215,47 @@ def search(start):
                 numNodes += 1
     return None, None
 
+def makeMove(curr, goal):
+    '''
+            make a move based on the current state of the board
+            and then return a list of the boards with the best
+            heuristic.
+            :param curr: current Board
+            :param goal: goal Board
+            :return: [ <Board> ]
+    '''
+
+    blankTile = curr.getBlank()
+    goal_x_tile = goal.x
+    goal_y_tile = goal.y
+
+    if (curr.position == "L"):
+        goal_x_tile = goal_x_tile - 1
+    elif (curr.posiiton == "R"):
+        goal_x_tile = goal_x_tile + 1
+    elif (curr.position == "U"):
+        goal_y_tile = goal_y_tile - 1
+    elif (curr.position == "D"):
+        goal_y_tile = goal_y_tile + 1
+    elif (curr.position == "LU"):
+        goal_x_tile = goal_x_tile - 1
+        goal_y_tile = goal_y_tile + 1
+    elif (curr.position == "RU"):
+        goal_x_tile = goal_x_tile + 1
+        goal_y_tile = goal_y_tile + 1
+    elif (curr.position == "LD"):
+        goal_x_tile = goal_x_tile - 1
+        goal_y_tile = goal_y_tile - 1
+    elif (curr.direction == "RD"):
+        goal_x_tile = goal_x_tile + 1
+        goal_y_tile = goal_y_tile - 1
+
+    for tile in self.tiles:  # searches for the tile by the location given by the blank tile modified by the direction
+        if (tile.x == goal_x_tile and tile.y == goal_y_tile):
+            goalTile = tile
+        goalTile.val, blankTile.val = blankTile.val, goalTile.val  # switches the two values for the adjacent tiles
+        return None
+
 def findBestf(board):
     f_lst = []
     positions = []
