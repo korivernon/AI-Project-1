@@ -1,8 +1,6 @@
-from function import *
 import copy
-import numpy as np
 import math
-import sys
+
 
 BLANK = 0
 LOWER = 0
@@ -12,10 +10,10 @@ class Board:
     def __init__(self, board, position=None):
         if position == None: #determine whether this is the first instance. if it is, then we
 
-            self.pre = board
-            self.parent = None
-            self.position = None
-            self.g = 0
+            self.pre = board #this stores the contents of the board on the first iteration
+            self.parent = None # the parent is set to none by default if it is the first
+            self.position = None # the position is set to None by default if it is the first
+            self.g = 0 # this is the depth
             self.h = self.manhattan()
             self.f = self.h + self.g
             self.blank,self.availability = getBlankTup(self.pre)  # get the blank dict if possible and determine avail
@@ -69,7 +67,7 @@ class Board:
                 if (tile.val == i):
                     currTile = tile
                 if (tile.goal == i):
-                    goalTile = tile
+                    goalTile = tile # we can just use rise over run instead of absolute value x2-x1/y2-y1?
             total += abs(currTile.x - goalTile.x) + abs(currTile.y - goalTile.y) #how to alter for diag..?
         return total
 
@@ -285,15 +283,16 @@ def valid_filename(filename):
     return True
 
 def main():
-    init_board_with_file_and_run("inp/Input1.txt")
-    pass
     while 1:
         filename = input("Please enter the filename you would like to perform the A Star Search on (q to quit): ")
         while not valid_filename(filename):
             filename = input("Please enter the filename you would like to perform the A Star Search on (q to quit): ")
-        if filename == "q":
+        if filename == "q": #if you want to quit then return break the loop
+            print("\nGoodbye.")
             break
         if not init_board_with_file_and_run(filename):
-            print("Invalid input given.")
+            print("Invalid input given.") #if this function returns false, this is an invalid input
             print()
+        else:
+            print("Output given in {}".format(filename[:filename.find(".")] + "_ASTAR_OUTPUT.txt")) # this is where the output is given
 main()
