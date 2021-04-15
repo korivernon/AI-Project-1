@@ -14,20 +14,20 @@ class Board:
             self.parent = None # the parent is set to none by default if it is the first
             self.position = None # the position is set to None by default if it is the first
             self.g = 0 # this is the depth
-            self.h = self.manhattan()
-            self.f = self.h + self.g
+            self.h = self.manhattan() #this is how the heuristic is calculated
+            self.f = self.h + self.g # f(n) is calculated f = g + h
             self.blank,self.availability = getBlankTup(self.pre)  # get the blank dict if possible and determine avail
         else:
-            self.pre = board.pre
+            self.pre = board.pre # on the second iteration, we are being passed the 2d tile list
             self.position = position #saving the last position
-            self.move()
+            self.move() #call the move function to use the position that was stored to move
             self.parent = copy.deepcopy(self.pre) #preserve the parent board
-            self.g = board.g + 1
-            self.h = self.manhattan()
-            self.f = self.g + self.h
+            self.g = board.g + 1 #increment the depth by one because we are going down
+            self.h = self.manhattan() #call manhattan to get the manhattan distances between goal
+            self.f = self.g + self.h #calculate f(n)
             self.blank,self.availability = getBlankTup(self.pre)  # get the blank dict if possible and determine avail
 
-    def __str__(self):                              #this is for string representation.
+    def __str__(self):                              #this is for string representation to help with output
         st = ''
         for i in range(len(self.pre)):
             line = self.pre[i]
@@ -36,16 +36,7 @@ class Board:
                 st = st + '\n'
         return st
 
-    def __repr__(self):
-        st = ''
-        for i in range(len(self.pre)):
-            line = self.pre[i]
-            st += "\t".join( [str(x) for x in line] )
-            if i != len(self.pre)-1:
-                st = st + '\n'
-        return st
-
-    def getBlank(self):
+    def getBlank(self):        #this obtains the blank space
         for tile in self.pre:
             if tile.val == 0:
                 return tile
@@ -57,10 +48,9 @@ class Board:
 
         return flatten
 
-    def manhattan(self):
+    def manhattan(self): #this obtains the manhattan distances between tiles
         total = 0
-        currTile = None
-        goalTile = None
+        currTile = None; goalTile = None
         flat = self.flatten()
         for i in range(len(flat)):
             for tile in flat:
