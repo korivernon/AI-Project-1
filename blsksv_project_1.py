@@ -1,15 +1,11 @@
 import copy
 import math
 
-
-BLANK = 0
-LOWER = 0
-UPPER = 3
+BLANK = 0; LOWER = 0; UPPER = 3
 
 class Board:
     def __init__(self, board, position=None):
         if position == None: #determine whether this is the first instance. if it is, then we
-
             self.pre = board #this stores the contents of the board on the first iteration
             self.parent = None # the parent is set to none by default if it is the first
             self.position = None # the position is set to None by default if it is the first
@@ -31,12 +27,12 @@ class Board:
         st = ''
         for i in range(len(self.pre)):
             line = self.pre[i]
-            st += "\t".join( [str(x) for x in line] )
+            st += "\t".join([str(x) for x in line])
             if i != len(self.pre)-1:
                 st = st + '\n'
         return st
 
-    def getBlank(self):        #this obtains the blank space
+    def getBlank(self):#this obtains the blank space
         for tile in self.pre:
             if tile.val == 0:
                 return tile
@@ -308,7 +304,7 @@ def output(board, shallowest_node, numNodes, directions, f_lst):
     return st
 
 def valid_filename(filename):
-    cond = filename[-4:-1] == ".txt" or filename == "q"
+    cond = filename[-4:-1] == ".txt" or filename == "q" # we want to check to see if we received a valid input
     if cond:
         return True
     return True
@@ -318,6 +314,7 @@ def main():
         filename = input("Please enter the filename you would like to perform the A Star Search on (q to quit): ")
         while not valid_filename(filename):
             filename = input("Please enter the filename you would like to perform the A Star Search on (q to quit): ")
+            print()
         if filename == "q": #if you want to quit then return break the loop
             print("\nGoodbye.")
             break
