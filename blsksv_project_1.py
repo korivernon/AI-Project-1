@@ -205,14 +205,6 @@ def findBestf(board):
     return f_lst, positions #return the tuple
 
 def parseLine(line):
-    '''
-    Given a line, parse the line and
-    convert all of the items to integers
-    if possible
-    precondition -> lst(string)
-    postcondition -> lst(int) if possible
-    return: lst(int) if possible
-    '''
     for i in range(len(line)):
         try:
             line[i] = int(line[i])
