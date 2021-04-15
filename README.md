@@ -5,7 +5,7 @@ Partners: Bethany Saunders and Kori Vernon
 
 ## Instructions:
 
-In order to run our program, you will need any modern Python compiler. There are multiple ways to run the program (We recommend IDLE). Once you open the file, execute it and then enter in the input file the form of a *.txt file. The input file will be loaded into the program, and it will perform the A* Algorithm using Manhattan Distance heuristic. If the user would like to quit the program before entering the filename they must type “q” to exit the program. Otherwise the program will run the provided text filename to perform the A* Search.
+In order to run our program, you will need any modern Python compiler. There are multiple ways to run the program (We recommend IDLE). Once you open the file, execute it and then enter in the input file the form of a `*.txt` file. The input file will be loaded into the program, and it will perform the A* Algorithm using Manhattan Distance heuristic. If the user would like to quit the program before entering the filename they must type “q” to exit the program. Otherwise the program will run the provided text filename to perform the A* Search.
 
 In order to compile the program, we suggest using the system module in python3.
 
